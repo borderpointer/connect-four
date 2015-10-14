@@ -6,7 +6,6 @@
 • CSS <br>
 • JS <br>
 
-<br>
 ## Update coming soon!
 
 
