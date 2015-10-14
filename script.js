@@ -1,10 +1,9 @@
-// refactor vanilla to jquery
-// submit css
-
  $(window).load(function () {
 
  	// player and computer vars need to be accessible from everywhere.
  	var player;
+
+ 	var player_2;
 
  	var computer;
 
@@ -12,7 +11,8 @@
 
  	var moves = 0; // for checking if there is a draw.
 
- 	// the user has to choose either O or X to start the game.
+
+ 	// the user has to choose either to play with another person or with the computer.
  	function start_game () {
 
  		var $button_two_players = $("#chose-two-players");
@@ -20,29 +20,25 @@
 
   		$button_two_players.click(function () {
 
- 			player = "O";
- 			computer = "X";
-
+ 			$button_two_players.remove();
  			$button_one_player.remove();
- 			$("h2").html("You are");
- 			$(this).html("Playing with Two Players");
 
- 			// invote two_players only when this button is clicked
+ 			$("#question").html("What are your names?");
+
+ 			// invote two_players only when the user chooses to play with another person.
  			two_players ();
 
  		});
 
    		$button_one_player.click(function () {
 
- 			player = "O";
- 			computer = "X";
-
  			$button_two_players.remove();
  			$button_one_player.remove();
+
  			$("#question").html("What is your name?");
 
 
- 			// invote two_players only when this button is clicked
+ 			// invote one_player only when the user chooses to play with the computer.
  			one_player ();
 
  		});
@@ -52,25 +48,59 @@
 
  	function two_players () {
 
+ 		// create two input tags and a submit button after the h2 tag within the buttons-row div.
+ 		$("#question").css("margin", "30px 0");
+ 		$(".buttons-row :first-child").after("<button id = 'submit' style = 'width: 290px; margin: 10px 0 30px 0;'>Here're Our Names</button>").after("<input id = 'player-1' style = 'display: block;' placeholder='Player 1 First Name'</input>" + "<input id = 'player-2' style = 'display: block;' placeholder='Player 2 First Name'</input>");
 
+ 		// when the user submit's their name do the following.
+ 		$("#submit").click(function() {
+
+ 			// remove everything, except the input (just hide)
+ 			$("#question").remove();
+ 			$("input").css("display", "none");
+ 			$("#submit").remove();
+
+ 			// populate the pick-color h2 with the name of the user and with the question of what color they want to be.
+ 			$("#pick-color").html(
+
+ 				"Hello " + $("#player-1").val() + " and " + $("#player-2").val() + "! " + "</br></br>" +
+ 				$("#player-1").val() + " is <span style='color: #4189C7;'>Blue</span>, and " + $("#player-2").val() + " is <span style='color: #C73D47;'>Red</span>."
+
+ 				);
+
+ 			// previously, the pick-color h2's display is "none", so change that to show.
+	 		$("#pick-color").css("display", "block");
+	 		$("#pick-color").css("margin", "25px 0");
+
+	 		// for two players, don't ask which colors they want to be, just assign them. So the make_board gets invoked automatically
+	 		// after the two players' names are submitted.
+	 		make_board ();
+
+ 		});
 
  	}
 
  	function one_player () {
 
+ 		// create an input tag and a submit button after the h2 tag within the buttons-row div.
+ 		$(".buttons-row :first-child").after("<button id = 'submit'>Here's My Name</button>").after("<input placeholder='First Name'</input>");
 
- 		$(".buttons-row :first-child").after("<button id = 'submit'>Here's My Name</button>").after("<input type='text' name='fname' placeholder='First Name'</input>");
-
+ 		// when the user submit's their name do the following.
  		$("#submit").click(function() {
 
+ 			// remove everything, except the input (just hide)
  			$("#question").remove();
  			$("input").css("display", "none");
  			$("#submit").remove();
 
+ 			// populate the pick-color h2 with the name of the user and with the question of what color they want to be.
  			$("#pick-color").html("Hello " + $("input").val() + "! " + "Are you feeling Hot or Cool?")
 
+ 			// previously, the pick-color h2's display is "none", so change that to show.
 	 		$("#pick-color").css("display", "block");
+	 		$("#pick-color").css("margin", "25px 0");
 
+	 		// previously, the two buttons' display is "none", so change that to show.
 	 		$("#chose-red").css("display", "initial");
 	 		$("#chose-blue").css("display", "initial");
 
@@ -83,8 +113,9 @@
  			computer = "X";
 
  			$("#chose-blue").remove();
- 			$("h2").html("You are");
- 			$("#chose-red").html("Red");
+ 			$("#chose-red").remove();
+
+ 			$("h2").html("You are <span style='color: #C73D47;'>Red</span>.");
 
  			// invote make_board only when this button is clicked
  			make_board();
@@ -97,9 +128,10 @@
  			player = "X";
  			computer = "O";
 
+ 			$("#chose-blue").remove();
  			$("#chose-red").remove();
- 			$("h2").html("You are");
- 			$("#chose-blue").html("Blue");
+
+ 			$("h2").html("You are <span style='color: #4189C7;'>Blue</span>.");
 
  			// invote make_board only when this button is clicked
  			make_board();
