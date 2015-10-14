@@ -1,11 +1,12 @@
 # Connect Four
 
-### Build with:
+#### Build with:
 
 • HTML <br>
 • CSS <br>
 • JS <br>
 
-#### Update coming soon!
+<br>
+## Update coming soon!
 
 
