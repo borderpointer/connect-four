@@ -2,8 +2,8 @@
 
 ### Build with:
 
-• HTML
-• CSS
-• JS
+• HTML <br>
+• CSS <br>
+• JS <br>
 
 
