@@ -56,7 +56,7 @@
  		// when the user submit's their name do the following.
  		$("#submit").click(function() {
 
- 			// remove everything, except the input (just hide)
+ 			// remove everything, except the input (just hide) because we need the value from the input
  			$("#question").remove();
  			$("input").css("display", "none");
  			$("#submit").remove();
@@ -74,11 +74,12 @@
 	 		$("#pick-color").css("display", "block");
 	 		$("#pick-color").css("margin", "25px 0");
 
-
-	 		num_of_players += 2;
 	 		// for two players, don't ask which colors they want to be, just assign them. So the make_board gets invoked automatically
 	 		// after the two players' names are submitted.
-	 		make_board ();
+	 		$(".row").css("display", "block");
+
+	 		// invoke function that caters to two players.
+	 		two_players_move ();
 
  		});
 
@@ -92,7 +93,7 @@
  		// when the user submit's their name do the following.
  		$("#submit").click(function() {
 
- 			// remove everything, except the input (just hide)
+ 			// remove everything, except the input (just hide) because we need the value from the input
  			$("#question").remove();
  			$("input").css("display", "none");
  			$("#submit").remove();
@@ -121,8 +122,11 @@
 
  			$("h2").html("You are <span style='color: #C73D47;'>Red</span>.");
 
- 			// invote make_board only when this button is clicked
- 			make_board();
+ 			// show the board after this button is clicked.
+ 			$(".row").css("display", "block");
+
+ 			// invoke function that caters to only one player.
+ 			player_move ();
 
  		});
 
@@ -137,98 +141,114 @@
 
  			$("h2").html("You are <span style='color: #4189C7;'>Blue</span>.");
 
- 			// invote make_board only when this button is clicked
- 			make_board();
+ 			// show the board after this button is clicked.
+ 			$(".row").css("display", "block");
+
+ 			// invoke function that caters to only one player.
+ 			player_move ();
 
  		});
 
  	}
 
- 	// make an array of 9 divs.
- 	function make_board () {
 
-	 	for (i = 0; i < 42; i++) {
 
-	 		// for each div that is getting appended, make the class "box", data-value "nothing",
-	 		// and put an empty p tag into the div.
-	 		$(".row").append("<div class = 'circle'" + "data-value = " + i + " data-name = 'nothing'></div>");
 
-	 	}
 
-	 	// fix so that there are multiple arrays, each containing 7 divs. and that another array is holding onto all arrays
+ 	//==================== Ditched Code =====================//
 
-	 	assign_class_names ();
+ 	// // make an array of 9 divs.
+ 	// function make_board () {
 
- 	}
+	 // 	for (i = 0; i < 42; i++) {
 
- 	function assign_class_names () {
+	 // 		// for each div that is getting appended, make the class "box", data-value "nothing",
+	 // 		// and put an empty p tag into the div.
+	 // 		$(".row").append("<div class = 'circle'" + "data-value = " + i + " data-name = 'nothing'></div>");
 
- 		var $all_circles = $(".circle");
+	 // 	}
 
- 		for (k = 1; k < 7; k++) {
+	 // 	// fix so that there are multiple arrays, each containing 7 divs. and that another array is holding onto all arrays
 
-	 		for (i = 0; i < 36; i += 7) {
+	 // 	assign_class_names ();
 
-	 			var j = 0;
+ 	// }
 
-	 			$all_circles.eq(i*k).addClass("col-" + j);
+ 	// function assign_class_names () {
 
-	 		}
+ 	// 	var $all_circles = $(".circle");
 
- 			j++;
+ 	// 	// for (k = 0; k < 7; k++) {
+
+	 // 	// 	for (i = 0; i < $all_circles.length; i ++) {
+
+	 // 	// 		if ($all_circles.eq(i*k).addClass("col-" + 0);
+
+	 // 	// 	}
+
+	 // 	// 	++j;
+ 	// 	// 	console.log(j);
+
+ 	// 	// }
+ 	// 	// var step = 0;
+
+ 	// 	// for (var i = 0; i < $all_circles.length; i++) {
+
+
+
+ 	// 	// 	if ($all_circles.eq(i).attr("data-value") % 7 === 0) {
+
+ 	// 	// 		//console.log($all_circles[i]);
+ 	// 	// 		$all_circles.eq(i).addClass("col-" + step);
+ 	// 	// 		step = step + 1;
+ 	// 	// 		console.log(step);
+
+ 	// 	// 	}
+
+ 	// 	// }
+
+ 	// }
+
+//==================== End of Ditched Code =====================//
+
+
+
+
+ 	function check_spot (index, column_name, new_classname, mark) {
+
+ 		if (column_name === "col-0") {
+
+ 			var column_0 = document.getElementsByClassName("col-0");
+
+ 			var column_0_arr = jQuery.makeArray (column_0);
+
+ 			for (i = column_0_arr.length - 1; i >= 0; i--) {
+
+ 				console.log(i);
+
+ 				if ( !(column_0_arr[i].classList.contains("circle-background-color-blue")) || (!column_0_arr[i].classList.contains("circle-background-color-red")) ) {
+
+ 					console.log('iffie');
+ 					make_move (column_0_arr[i], new_classname, mark);
+
+ 				} else if ( column_0_arr[i].classList.contains("circle-background-color-blue") || column_0_arr[i].classList.contains("circle-background-color-red") ) {
+
+ 					console.log('elsie');
+
+ 					make_move (column_0[index], new_classname, mark);
+
+ 				}
+
+ 			}
 
  		}
 
-	 	if (num_of_players === 2) {
-
-	 		two_players_move ();
-
-	 	} else {
-
-	 		player_move ();
-
-	 	}
-
- 	}
-
- 	function check_spot (index, classname, mark) {
-
- 		//if
-
- 		var $all_circles = $(".circle");
-
- 		var position = $all_circles.eq(index).attr("data-value");
-
- 		var i = 1;
-
- 		var j = 7;
-
- 		//for (i = 1, j = 7; i < 8, j > 0; i++, j--){
-
- 			// if ( position - (7 * i) < position < position + (7 * j) ) {
-
- 			// 	console.log(position);
-
- 			// 	console.log(position + (7 * j));
- 			// 	make_move ((position + (7 * j)), classname, mark);
-
- 			// 	i++;
- 			// 	j--;
-
- 			// }
-
- 		//}
-
- 		make_move (index, classname, mark);
-
  	}
  	// invoke this function when having a turn, for either player or computer.
- 	function make_move (position, classname, mark) {
+ 	function make_move (position, new_classname, mark) {
 
- 		var $all_circles = $(".circle");
-
- 		$all_circles.eq(position).addClass(classname);
- 		$all_circles.eq(position).attr("data-name", mark);
+ 		$(position).addClass(new_classname);
+ 		$(position).eq(position).attr("data-name", mark);
 
  	}
 
@@ -244,26 +264,10 @@
 				if ($(this).attr("data-name") === "nothing") {
 
 					// only change the innerHTML value, add class, and change the data-value of the div that was clickable and is clicked.
-					check_spot (index, ("circle-background-color-" + player), "player");
+					check_spot (index, $(this).attr("class").split(" ")[1], ("circle-background-color-" + player), "player");
 
 	 				// later, if moves === 9, it will mean that there is a draw.
 	 				moves ++;
-
- 					// after making a move, check for win with the player's mark as argument.
-	 				//check_for_win (player);
-
-	 				// only invoke the computer to make a move if there is no winner.
-	 				// if (!winner) {
-	 				// 	console.log("called inside player move");
-	 				// 	setTimeout(computer_move, 1500);
-
-	 				// }
-
-	 				if (!winner) {
-
-	 					player_2_move ();
-
-	 				}
 
 	 			}
 
@@ -290,12 +294,12 @@
 
 					if (this_player_clicked === 1) {
 
-						check_spot (index, "circle-background-color-blue", "player-1");
+						check_spot (index, $(this).attr("class").split(" ")[1], "circle-background-color-blue", "player-1");
 						this_player_clicked = 2;
 
 					} else {
 
-						check_spot (index, "circle-background-color-red", "player-2");
+						check_spot (index, $(this).attr("class").split(" ")[1], "circle-background-color-red", "player-2");
 						this_player_clicked = 1;
 
 					}
