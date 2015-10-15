@@ -151,11 +151,33 @@
 
 	 		// for each div that is getting appended, make the class "box", data-value "nothing",
 	 		// and put an empty p tag into the div.
-	 		$(".row").append("<div class = 'circle'" + "id = circle-" + i + " data-value = 'nothing'></div>");
+	 		$(".row").append("<div class = 'circle'" + "data-value = " + i + " data-name = 'nothing'></div>");
 
 	 	}
 
 	 	// fix so that there are multiple arrays, each containing 7 divs. and that another array is holding onto all arrays
+
+	 	assign_class_names ();
+
+ 	}
+
+ 	function assign_class_names () {
+
+ 		var $all_circles = $(".circle");
+
+ 		for (k = 1; k < 7; k++) {
+
+	 		for (i = 0; i < 36; i += 7) {
+
+	 			var j = 0;
+
+	 			$all_circles.eq(i*k).addClass("col-" + j);
+
+	 		}
+
+ 			j++;
+
+ 		}
 
 	 	if (num_of_players === 2) {
 
@@ -166,25 +188,49 @@
 	 		player_move ();
 
 	 	}
-	 	// after the board is made, the computer goes first.
- 		//computer_move ();
 
  	}
 
+ 	function check_spot (index, classname, mark) {
 
- 	// invoke this function when having a turn, for either player or computer.
- 	function make_move (index, classname, mark) {
+ 		//if
 
  		var $all_circles = $(".circle");
 
- 		$all_circles.eq(index).addClass(classname);
- 		$all_circles.eq(index).attr("data-value", mark);
+ 		var position = $all_circles.eq(index).attr("data-value");
+
+ 		var i = 1;
+
+ 		var j = 7;
+
+ 		//for (i = 1, j = 7; i < 8, j > 0; i++, j--){
+
+ 			// if ( position - (7 * i) < position < position + (7 * j) ) {
+
+ 			// 	console.log(position);
+
+ 			// 	console.log(position + (7 * j));
+ 			// 	make_move ((position + (7 * j)), classname, mark);
+
+ 			// 	i++;
+ 			// 	j--;
+
+ 			// }
+
+ 		//}
+
+ 		make_move (index, classname, mark);
 
  	}
+ 	// invoke this function when having a turn, for either player or computer.
+ 	function make_move (position, classname, mark) {
 
- 	// all of the divs made from make_board need to be out in the global scope (within onload) so that it can be accessed
- 	// in all functions.
+ 		var $all_circles = $(".circle");
 
+ 		$all_circles.eq(position).addClass(classname);
+ 		$all_circles.eq(position).attr("data-name", mark);
+
+ 	}
 
  	function player_move () {
 
@@ -195,10 +241,10 @@
 
 			$all_circles.eq(index).click(function () {
 
-				if ($(this).attr("data-value") === "nothing") {
+				if ($(this).attr("data-name") === "nothing") {
 
 					// only change the innerHTML value, add class, and change the data-value of the div that was clickable and is clicked.
-					make_move (index, ("circle-background-color-" + player), "player");
+					check_spot (index, ("circle-background-color-" + player), "player");
 
 	 				// later, if moves === 9, it will mean that there is a draw.
 	 				moves ++;
@@ -238,18 +284,18 @@
 
 			$all_circles.eq(index).click(function () {
 
-				if ( $(this).attr("data-value") === "nothing") {
+				if ( $(this).attr("data-name") === "nothing") {
 
 					// only change the innerHTML value, add class, and change the data-value of the div that was clickable and is clicked.
 
 					if (this_player_clicked === 1) {
 
-						make_move (index, "circle-background-color-blue", player);
+						check_spot (index, "circle-background-color-blue", "player-1");
 						this_player_clicked = 2;
 
 					} else {
 
-						make_move (index, "circle-background-color-red", player_2);
+						check_spot (index, "circle-background-color-red", "player-2");
 						this_player_clicked = 1;
 
 					}
@@ -275,11 +321,11 @@
  // 		//var computer_choice = Math.floor(Math.random() * 42);
  // 		var computer_choice = 1;
 
- //  		if ($all_circles.eq(computer_choice).attr("data-value") === "nothing") {
+ //  		if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
 
  //  			console.log("called inside computer move before making move");
  //  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
- //  			make_move (computer_choice, ("circle-background-color-" + computer), "computer");
+ //  			check_spot (computer_choice, ("circle-background-color-" + computer), "computer");
  //  			player_move ();
 
  // 			moves ++; // global var
