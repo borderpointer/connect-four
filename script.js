@@ -1,16 +1,17 @@
  $(window).load(function () {
 
  	// player and computer vars need to be accessible from everywhere.
- 	var player;
+ 	var player = "player";
 
- 	var player_2;
+ 	var player_2 = "player 2";
 
- 	var computer;
+ 	var num_of_players = 0;
+
+ 	var computer = "computer";
 
  	var winner = false; // this is used to stop the computer from making a move after there is a winner.
 
  	var moves = 0; // for checking if there is a draw.
-
 
  	// the user has to choose either to play with another person or with the computer.
  	function start_game () {
@@ -63,8 +64,9 @@
  			// populate the pick-color h2 with the name of the user and with the question of what color they want to be.
  			$("#pick-color").html(
 
- 				"Hello " + $("#player-1").val() + " and " + $("#player-2").val() + "! " + "</br></br>" +
- 				$("#player-1").val() + " is <span style='color: #4189C7;'>Blue</span>, and " + $("#player-2").val() + " is <span style='color: #C73D47;'>Red</span>."
+ 				"Hello, " + $("#player-1").val() + " and " + $("#player-2").val() + "! " + "</br></br>" +
+ 				$("#player-1").val() + " is <span style='color: #4189C7;'>Blue</span>, and " + $("#player-2").val() + " is <span style='color: #C73D47;'>Red</span>.</br>" +
+ 				$("#player-1").val() + ", go first!"
 
  				);
 
@@ -72,6 +74,8 @@
 	 		$("#pick-color").css("display", "block");
 	 		$("#pick-color").css("margin", "25px 0");
 
+
+	 		num_of_players += 2;
 	 		// for two players, don't ask which colors they want to be, just assign them. So the make_board gets invoked automatically
 	 		// after the two players' names are submitted.
 	 		make_board ();
@@ -94,7 +98,7 @@
  			$("#submit").remove();
 
  			// populate the pick-color h2 with the name of the user and with the question of what color they want to be.
- 			$("#pick-color").html("Hello " + $("input").val() + "! " + "Are you feeling Hot or Cool?")
+ 			$("#pick-color").html("Hello, " + $("input").val() + "! " + "Are you feeling Hot or Cool?")
 
  			// previously, the pick-color h2's display is "none", so change that to show.
 	 		$("#pick-color").css("display", "block");
@@ -106,14 +110,14 @@
 
  		});
 
- 		// if the player chooses to be "O"
+ 		// if the player chooses to be Red.
  		$("#chose-red").click(function () {
-
- 			player = "O";
- 			computer = "X";
 
  			$("#chose-blue").remove();
  			$("#chose-red").remove();
+
+ 			player = "red";
+ 			computer = "blue";
 
  			$("h2").html("You are <span style='color: #C73D47;'>Red</span>.");
 
@@ -122,19 +126,20 @@
 
  		});
 
- 		// if the player chooses to be "X"
+ 		// if the player chooses to be Blue.
  		$("#chose-blue").click(function () {
-
- 			player = "X";
- 			computer = "O";
 
  			$("#chose-blue").remove();
  			$("#chose-red").remove();
+
+ 			player = "blue";
+ 			computer = "red";
 
  			$("h2").html("You are <span style='color: #4189C7;'>Blue</span>.");
 
  			// invote make_board only when this button is clicked
  			make_board();
+
  		});
 
  	}
@@ -146,10 +151,21 @@
 
 	 		// for each div that is getting appended, make the class "box", data-value "nothing",
 	 		// and put an empty p tag into the div.
-	 		$(".row").append("<div class = 'circle' data-value = 'nothing'><p></p></div>");
+	 		$(".row").append("<div class = 'circle'" + "id = circle-" + i + " data-value = 'nothing'></div>");
 
 	 	}
 
+	 	// fix so that there are multiple arrays, each containing 7 divs. and that another array is holding onto all arrays
+
+	 	if (num_of_players === 2) {
+
+	 		two_players_move ();
+
+	 	} else {
+
+	 		player_move ();
+
+	 	}
 	 	// after the board is made, the computer goes first.
  		//computer_move ();
 
@@ -159,12 +175,10 @@
  	// invoke this function when having a turn, for either player or computer.
  	function make_move (index, classname, mark) {
 
- 		var $all_boxes = $(".box");
+ 		var $all_circles = $(".circle");
 
- 		$all_boxes.eq(index).children("p").text(mark);
-
- 		$all_boxes.eq(index).addClass(classname);
- 		$all_boxes.eq(index).data("value", mark);
+ 		$all_circles.eq(index).addClass(classname);
+ 		$all_circles.eq(index).attr("data-value", mark);
 
  	}
 
@@ -174,28 +188,34 @@
 
  	function player_move () {
 
- 		var $all_boxes = $(".box");
+ 		var $all_circles = $(".circle");
 
  		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
- 		$.each($all_boxes, function (index, value) {
+ 		$.each($all_circles, function (index, value) {
 
-			$all_boxes.eq(index).click(function () {
+			$all_circles.eq(index).click(function () {
 
-				if ($(this).children("p").text() === "") {
+				if ($(this).attr("data-value") === "nothing") {
 
 					// only change the innerHTML value, add class, and change the data-value of the div that was clickable and is clicked.
-					make_move (index, "box-background-color-one", player);
+					make_move (index, ("circle-background-color-" + player), "player");
 
 	 				// later, if moves === 9, it will mean that there is a draw.
 	 				moves ++;
 
  					// after making a move, check for win with the player's mark as argument.
-	 				check_for_win (player);
+	 				//check_for_win (player);
 
 	 				// only invoke the computer to make a move if there is no winner.
+	 				// if (!winner) {
+	 				// 	console.log("called inside player move");
+	 				// 	setTimeout(computer_move, 1500);
+
+	 				// }
+
 	 				if (!winner) {
 
-	 					setTimeout(computer_move, 1500);
+	 					player_2_move ();
 
 	 				}
 
@@ -207,103 +227,145 @@
 
  	}
 
- 	function computer_move () {
+ 	 function two_players_move () {
 
- 		var $all_boxes = $(".box");
+ 		var $all_circles = $(".circle");
 
- 		// computer needs to choose a number between 0 and 8 in order to place their mark on a random spot that is not already taken.
- 		var computer_choice = Math.floor(Math.random() * 9);
+ 		var this_player_clicked = 1;
 
-  		if ($all_boxes.eq(computer_choice).children("p").text() === "") {
+ 		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
+ 		$.each($all_circles, function (index, value) {
 
-  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
-  			make_move (computer_choice, "box-background-color-two", computer);
-  			player_move ();
+			$all_circles.eq(index).click(function () {
 
- 			moves ++; // global var
+				if ( $(this).attr("data-value") === "nothing") {
 
+					// only change the innerHTML value, add class, and change the data-value of the div that was clickable and is clicked.
 
- 			// after making a move, check for win with the computer's mark as argument.
- 			check_for_win (computer);
+					if (this_player_clicked === 1) {
 
- 			// only invoke the player to make a move if there is no winner.
- 			// if (!winner) {
+						make_move (index, "circle-background-color-blue", player);
+						this_player_clicked = 2;
 
-				// player_move ();
+					} else {
 
-	 		// }
+						make_move (index, "circle-background-color-red", player_2);
+						this_player_clicked = 1;
 
-			} else {
+					}
 
-			computer_move ();
-		}
+			 		// later, if moves === 9, it will mean that there is a draw.
+			 		moves ++;
 
+			 	}
 
-
- 	}
-
- 	function check_for_win (winning_mark) {
-
- 		var $all_boxes = $(".box");
-
-	 	if (
-
-	 		// there must be a better way of checking for a winner, but this works.
-	 		( ( $all_boxes.eq(0).data("value") === $all_boxes.eq(3).data("value") ) && ( $all_boxes.eq(0).data("value") === $all_boxes.eq(6).data("value") ) && ( $all_boxes.eq(0).data("value") === winning_mark) ) ||
-	 		( ( $all_boxes.eq(1).data("value") === $all_boxes.eq(4).data("value") ) && ( $all_boxes.eq(1).data("value") === $all_boxes.eq(7).data("value") ) && ( $all_boxes.eq(1).data("value") === winning_mark) ) ||
-	 		( ( $all_boxes.eq(2).data("value") === $all_boxes.eq(5).data("value") ) && ( $all_boxes.eq(2).data("value") === $all_boxes.eq(8).data("value") ) && ( $all_boxes.eq(2).data("value") === winning_mark) ) ||
-	 		( ( $all_boxes.eq(0).data("value") === $all_boxes.eq(1).data("value") ) && ( $all_boxes.eq(0).data("value") === $all_boxes.eq(2).data("value") ) && ( $all_boxes.eq(0).data("value") === winning_mark) ) ||
-	 		( ( $all_boxes.eq(3).data("value") === $all_boxes.eq(4).data("value") ) && ( $all_boxes.eq(3).data("value") === $all_boxes.eq(5).data("value") ) && ( $all_boxes.eq(3).data("value") === winning_mark) ) ||
-	 		( ( $all_boxes.eq(6).data("value") === $all_boxes.eq(7).data("value") ) && ( $all_boxes.eq(6).data("value") === $all_boxes.eq(8).data("value") ) && ( $all_boxes.eq(6).data("value") === winning_mark) ) ||
-	 		( ( $all_boxes.eq(0).data("value") === $all_boxes.eq(4).data("value") ) && ( $all_boxes.eq(0).data("value") === $all_boxes.eq(8).data("value") ) && ( $all_boxes.eq(0).data("value") === winning_mark) ) ||
-	 		( ( $all_boxes.eq(2).data("value") === $all_boxes.eq(4).data("value") ) && ( $all_boxes.eq(2).data("value") === $all_boxes.eq(6).data("value") ) && ( $all_boxes.eq(2).data("value") === winning_mark) )
-
-	 		)
-
-	 		{
-
-	 			$("h2").html(winning_mark + " Wins!");
-
-	 			// invoke the play again function after there is a winner.
-	 			play_again ();
-
-	 			winner = true;
-
-	 		} else if (moves === 9) {
-
-	 			$("h2").html("It's a Draw!");
-
-	 			// invoke the play again function after there is a winner.
-	 			play_again ();
-
-	 		}
-
-	}
-
-	// create a reset button.
- 	function play_again () {
-
- 		if (player === "X") {
-
- 			$("#chose-blue").remove();
-
- 		} else if (player === "O") {
-
- 			$("#chose-red").remove();
-
- 		}
-
- 		$(".buttons-row").append("<button id = 'play-again'>Play Again</button>");
-
-
- 		// onclick, reload the window.
- 		$("#play-again").click(function () {
-
- 			location.reload();
+	 		});
 
  		});
 
  	}
+
+ // 	function computer_move () {
+
+ // 		console.log("called inside computer move");
+
+ // 		var $all_circles = $(".box");
+
+ // 		// computer needs to choose a number between 0 and 8 in order to place their mark on a random spot that is not already taken.
+ // 		//var computer_choice = Math.floor(Math.random() * 42);
+ // 		var computer_choice = 1;
+
+ //  		if ($all_circles.eq(computer_choice).attr("data-value") === "nothing") {
+
+ //  			console.log("called inside computer move before making move");
+ //  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
+ //  			make_move (computer_choice, ("circle-background-color-" + computer), "computer");
+ //  			player_move ();
+
+ // 			moves ++; // global var
+
+
+ // 			// after making a move, check for win with the computer's mark as argument.
+ // 			//check_for_win (computer);
+
+ // 			// only invoke the player to make a move if there is no winner.
+ // 			// if (!winner) {
+
+	// 			// player_move ();
+
+	//  		// }
+
+	// 		} else {
+
+	// 		//computer_move ();
+	// 	}
+
+
+
+ // 	}
+
+ // 	function check_for_win (winning_mark) {
+
+ // 		var $all_circles = $(".box");
+
+	//  	if (
+
+	//  		// there must be a better way of checking for a winner, but this works.
+	//  		( ( $all_circles.eq(0).data("value") === $all_circles.eq(3).data("value") ) && ( $all_circles.eq(0).data("value") === $all_circles.eq(6).data("value") ) && ( $all_circles.eq(0).data("value") === winning_mark) ) ||
+	//  		( ( $all_circles.eq(1).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(1).data("value") === $all_circles.eq(7).data("value") ) && ( $all_circles.eq(1).data("value") === winning_mark) ) ||
+	//  		( ( $all_circles.eq(2).data("value") === $all_circles.eq(5).data("value") ) && ( $all_circles.eq(2).data("value") === $all_circles.eq(8).data("value") ) && ( $all_circles.eq(2).data("value") === winning_mark) ) ||
+	//  		( ( $all_circles.eq(0).data("value") === $all_circles.eq(1).data("value") ) && ( $all_circles.eq(0).data("value") === $all_circles.eq(2).data("value") ) && ( $all_circles.eq(0).data("value") === winning_mark) ) ||
+	//  		( ( $all_circles.eq(3).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(3).data("value") === $all_circles.eq(5).data("value") ) && ( $all_circles.eq(3).data("value") === winning_mark) ) ||
+	//  		( ( $all_circles.eq(6).data("value") === $all_circles.eq(7).data("value") ) && ( $all_circles.eq(6).data("value") === $all_circles.eq(8).data("value") ) && ( $all_circles.eq(6).data("value") === winning_mark) ) ||
+	//  		( ( $all_circles.eq(0).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(0).data("value") === $all_circles.eq(8).data("value") ) && ( $all_circles.eq(0).data("value") === winning_mark) ) ||
+	//  		( ( $all_circles.eq(2).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(2).data("value") === $all_circles.eq(6).data("value") ) && ( $all_circles.eq(2).data("value") === winning_mark) )
+
+	//  		)
+
+	//  		{
+
+	//  			$("h2").html(winning_mark + " Wins!");
+
+	//  			// invoke the play again function after there is a winner.
+	//  			play_again ();
+
+	//  			winner = true;
+
+	//  		} else if (moves === 9) {
+
+	//  			$("h2").html("It's a Draw!");
+
+	//  			// invoke the play again function after there is a winner.
+	//  			play_again ();
+
+	//  		}
+
+	// }
+
+	// // create a reset button.
+ // 	function play_again () {
+
+ // 		if (player === "X") {
+
+ // 			$("#chose-blue").remove();
+
+ // 		} else if (player === "O") {
+
+ // 			$("#chose-red").remove();
+
+ // 		}
+
+ // 		$(".buttons-row").append("<button id = 'play-again'>Play Again</button>");
+
+
+ // 		// onclick, reload the window.
+ // 		$("#play-again").click(function () {
+
+ // 			location.reload();
+
+ // 		});
+
+ // 	}
 
  	// this is where it all begins.
  	start_game ();

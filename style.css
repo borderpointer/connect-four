@@ -116,21 +116,21 @@ h2 {
 
 }
 
-.circle-background-color-one {
+.circle-background-color-blue {
 	background-color: #4189C7;
 	border: 3px solid #4189C7;
 }
 
-.circle-background-color-one:hover {
+.circle-background-color-blue:hover {
 	border: 3px solid #4189C7;
 }
 
-.circle-background-color-two {
+.circle-background-color-red {
 	background-color: #C73D47;
 	border: 3px solid #C73D47;
 }
 
-.circle-background-color-two:hover {
+.circle-background-color-red:hover {
 	border: 3px solid #C73D47;
 }
 
