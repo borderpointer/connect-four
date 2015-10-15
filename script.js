@@ -218,28 +218,51 @@
 
  		if (column_name === "col-0") {
 
+ 			// grab all the elements with the class that is the same as the above.
  			var column_0 = document.getElementsByClassName("col-0");
 
+ 			// make an array with all of the elements from above.
  			var column_0_arr = jQuery.makeArray (column_0);
 
- 			for (i = column_0_arr.length - 1; i >= 0; i--) {
+ 			// check if any of the array items have been "taken" starting from the last index.
+ 			$(column_0_arr).each (function (index, value) {
 
- 				console.log(i);
 
- 				if ( !(column_0_arr[i].classList.contains("circle-background-color-blue")) || (!column_0_arr[i].classList.contains("circle-background-color-red")) ) {
+ 				if (
 
- 					console.log('iffie');
- 					make_move (column_0_arr[i], new_classname, mark);
+ 					!($(column_0_arr).eq(index).hasClass("circle-background-color-blue")) || (!$(column_0_arr).eq(index).hasClass("circle-background-color-red")) &&
+ 					($(column_0_arr).eq(index).attr("data-name") === "nothing")
 
- 				} else if ( column_0_arr[i].classList.contains("circle-background-color-blue") || column_0_arr[i].classList.contains("circle-background-color-red") ) {
+ 					)
 
- 					console.log('elsie');
+ 				{
 
- 					make_move (column_0[index], new_classname, mark);
+ 					console.log('iffie', index);
+ 					make_move ($(column_0_arr).eq(index), new_classname, mark);
+
 
  				}
 
- 			}
+ 			});
+ 			// for (i = column_0_arr.length - 1; i > -1; i--) {
+
+ 			// 	if (
+
+ 			// 		!(column_0_arr[i].classList.contains("circle-background-color-blue")) || (!column_0_arr[i].classList.contains("circle-background-color-red")) &&
+ 			// 		(column_0_arr[i].getAttribute("data-name") === "nothing")
+
+ 			// 		)
+
+ 			// 	{
+
+ 			// 		console.log('iffie', i);
+ 			// 		make_move (column_0_arr[i], new_classname, mark);
+
+ 			// 		break;
+
+ 			// 	}
+
+ 			// }
 
  		}
 
@@ -248,7 +271,7 @@
  	function make_move (position, new_classname, mark) {
 
  		$(position).addClass(new_classname);
- 		$(position).eq(position).attr("data-name", mark);
+ 		$(position).attr("data-name", mark);
 
  	}
 
@@ -263,7 +286,6 @@
 
 				if ($(this).attr("data-name") === "nothing") {
 
-					// only change the innerHTML value, add class, and change the data-value of the div that was clickable and is clicked.
 					check_spot (index, $(this).attr("class").split(" ")[1], ("circle-background-color-" + player), "player");
 
 	 				// later, if moves === 9, it will mean that there is a draw.
