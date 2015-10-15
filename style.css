@@ -5,6 +5,10 @@ html {
 	color: #333;
 }
 
+#title {
+	cursor: pointer;
+}
+
 .container {
 	width: 50%;
 	margin: 0 auto;
