@@ -10,7 +10,7 @@ html {
 }
 
 .container {
-	width: 50%;
+	width: 670px;
 	margin: 0 auto;
 	text-align: center;
 }
@@ -21,10 +21,8 @@ html {
 }
 
 .row {
-	width: 100%;
-	margin: 0 auto;
-	padding-bottom: 7vh;
-	display: none;
+	margin: 30px auto 7vh auto;
+	padding: 20px 10px;
 }
 
 button {
@@ -40,7 +38,7 @@ button {
 }
 
 button:hover {
-  	background-color: #F4DB2F;
+  	background-color: #FFDF00;
 }
 
 button:focus {
@@ -59,7 +57,7 @@ input {
 	font-family: "Montserrat", Futura, Helvetica, sans-serif;;
 	font-size: 1.25em;
 	padding: 15px 30px;
-	background-color: #f6f6f6;
+	background-color: #f4f4f4;
 	border: 1px solid #B3B3B3;
 	border-radius: 5px;
 	margin: 10px auto;
@@ -97,15 +95,15 @@ h2 {
 	height: 75px;
 	display: inline-block;
 	margin: 3px 5px;
-	border: 3px solid #B3B3B3;
+	border: 3px solid #b3b3b3;
 	border-radius: 50%;
-	background-color: #f6f6f6;
+	background-color: #fff;
 	vertical-align: center;
 	transition: all .25s ease;
 }
 
 .circle:hover, .circle:active {
-	border: 3px solid #777;
+	border: 3px solid #797979;
 }
 
 .circle > p {
@@ -139,7 +137,7 @@ h2 {
 	border: 3px solid #C73D47;
 }
 
-@media (max-width: 1290px) {
+@media (max-width: 785px) {
 
 	#disclaimer {
 		display: inline;
