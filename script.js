@@ -415,6 +415,7 @@
 
  		var $all_circles = $(".circle");
 
+ 		// for alternating turns.
  		var this_player_clicked = 1;
 
  		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
