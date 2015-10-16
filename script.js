@@ -213,8 +213,9 @@
 
 
 
-
- 	function check_spot (index, column_name, new_classname, mark) {
+	// this function checks to see if the most bottom spot and then on, for 7 columns, is taken or not, and if not, drops your coin
+	// to the most bottom spot. This function is only invoked after a click.
+ 	function check_spot (column_name, new_classname, mark) {
 
  		if (column_name === "col-0") {
 
@@ -224,45 +225,156 @@
  			// make an array with all of the elements from above.
  			var column_0_arr = jQuery.makeArray (column_0);
 
- 			// check if any of the array items have been "taken" starting from the last index.
- 			$(column_0_arr).each (function (index, value) {
 
+ 			for (i = column_0_arr.length - 1; i > -1; i--) {
 
- 				if (
+ 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
 
- 					!($(column_0_arr).eq(index).hasClass("circle-background-color-blue")) || (!$(column_0_arr).eq(index).hasClass("circle-background-color-red")) &&
- 					($(column_0_arr).eq(index).attr("data-name") === "nothing")
+ 					make_move (column_0_arr[i], new_classname, mark);
 
- 					)
-
- 				{
-
- 					console.log('iffie', index);
- 					make_move ($(column_0_arr).eq(index), new_classname, mark);
-
+ 					break;
 
  				}
 
- 			});
- 			// for (i = column_0_arr.length - 1; i > -1; i--) {
+ 			}
 
- 			// 	if (
+ 		}
 
- 			// 		!(column_0_arr[i].classList.contains("circle-background-color-blue")) || (!column_0_arr[i].classList.contains("circle-background-color-red")) &&
- 			// 		(column_0_arr[i].getAttribute("data-name") === "nothing")
+ 		if (column_name === "col-1") {
 
- 			// 		)
+ 			// grab all the elements with the class that is the same as the above.
+ 			var column_0 = document.getElementsByClassName("col-1");
 
- 			// 	{
+ 			// make an array with all of the elements from above.
+ 			var column_0_arr = jQuery.makeArray (column_0);
 
- 			// 		console.log('iffie', i);
- 			// 		make_move (column_0_arr[i], new_classname, mark);
 
- 			// 		break;
+ 			for (i = column_0_arr.length - 1; i > -1; i--) {
 
- 			// 	}
+ 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
 
- 			// }
+ 					make_move (column_0_arr[i], new_classname, mark);
+
+ 					break;
+
+ 				}
+
+ 			}
+
+ 		}
+
+ 		if (column_name === "col-2") {
+
+ 			// grab all the elements with the class that is the same as the above.
+ 			var column_0 = document.getElementsByClassName("col-2");
+
+ 			// make an array with all of the elements from above.
+ 			var column_0_arr = jQuery.makeArray (column_0);
+
+
+ 			for (i = column_0_arr.length - 1; i > -1; i--) {
+
+ 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
+
+ 					make_move (column_0_arr[i], new_classname, mark);
+
+ 					break;
+
+ 				}
+
+ 			}
+
+ 		}
+
+ 		if (column_name === "col-3") {
+
+ 			// grab all the elements with the class that is the same as the above.
+ 			var column_0 = document.getElementsByClassName("col-3");
+
+ 			// make an array with all of the elements from above.
+ 			var column_0_arr = jQuery.makeArray (column_0);
+
+
+ 			for (i = column_0_arr.length - 1; i > -1; i--) {
+
+ 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
+
+ 					make_move (column_0_arr[i], new_classname, mark);
+
+ 					break;
+
+ 				}
+
+ 			}
+
+ 		}
+
+ 		if (column_name === "col-4") {
+
+ 			// grab all the elements with the class that is the same as the above.
+ 			var column_0 = document.getElementsByClassName("col-4");
+
+ 			// make an array with all of the elements from above.
+ 			var column_0_arr = jQuery.makeArray (column_0);
+
+
+ 			for (i = column_0_arr.length - 1; i > -1; i--) {
+
+ 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
+
+ 					make_move (column_0_arr[i], new_classname, mark);
+
+ 					break;
+
+ 				}
+
+ 			}
+
+ 		}
+
+ 		if (column_name === "col-5") {
+
+ 			// grab all the elements with the class that is the same as the above.
+ 			var column_0 = document.getElementsByClassName("col-5");
+
+ 			// make an array with all of the elements from above.
+ 			var column_0_arr = jQuery.makeArray (column_0);
+
+
+ 			for (i = column_0_arr.length - 1; i > -1; i--) {
+
+ 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
+
+ 					make_move (column_0_arr[i], new_classname, mark);
+
+ 					break;
+
+ 				}
+
+ 			}
+
+ 		}
+
+ 		if (column_name === "col-6") {
+
+ 			// grab all the elements with the class that is the same as the above.
+ 			var column_0 = document.getElementsByClassName("col-6");
+
+ 			// make an array with all of the elements from above.
+ 			var column_0_arr = jQuery.makeArray (column_0);
+
+
+ 			for (i = column_0_arr.length - 1; i > -1; i--) {
+
+ 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
+
+ 					make_move (column_0_arr[i], new_classname, mark);
+
+ 					break;
+
+ 				}
+
+ 			}
 
  		}
 
@@ -286,7 +398,7 @@
 
 				if ($(this).attr("data-name") === "nothing") {
 
-					check_spot (index, $(this).attr("class").split(" ")[1], ("circle-background-color-" + player), "player");
+					check_spot ($(this).attr("class").split(" ")[1], ("circle-background-color-" + player), "player");
 
 	 				// later, if moves === 9, it will mean that there is a draw.
 	 				moves ++;
@@ -316,12 +428,12 @@
 
 					if (this_player_clicked === 1) {
 
-						check_spot (index, $(this).attr("class").split(" ")[1], "circle-background-color-blue", "player-1");
+						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-blue", "player-1");
 						this_player_clicked = 2;
 
 					} else {
 
-						check_spot (index, $(this).attr("class").split(" ")[1], "circle-background-color-red", "player-2");
+						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-red", "player-2");
 						this_player_clicked = 1;
 
 					}
@@ -351,7 +463,7 @@
 
  //  			console.log("called inside computer move before making move");
  //  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
- //  			check_spot (computer_choice, ("circle-background-color-" + computer), "computer");
+ //  			check_spot (("circle-background-color-" + computer), "computer");
  //  			player_move ();
 
  // 			moves ++; // global var
