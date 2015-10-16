@@ -54,9 +54,6 @@
 	var row_4_arr = jQuery.makeArray(row_4);
 	var row_5_arr = jQuery.makeArray(row_5);
 
-	// grab all spots
-	var $all_circles = $(".circle");
-
 
  	// the user has to choose either to play with another person or with the computer.
  	function start_game () {
@@ -119,12 +116,11 @@
 	 		$("#pick-color").css("display", "block");
 	 		$("#pick-color").css("margin", "25px 0");
 
+	 		num_of_players = 2;
+
 	 		// for two players, don't ask which colors they want to be, just assign them. So the make_board gets invoked automatically
 	 		// after the two players' names are submitted.
-	 		$(".row").css("display", "block");
-
-	 		// invoke function that caters to two players.
-	 		two_players_move ();
+	 		make_board ();
 
  		});
 
@@ -168,12 +164,8 @@
 
  			$("h2").html("You are <span style='color: #C73D47;'>Red</span>.");
 
- 			// show the board after this button is clicked.
- 			$(".row").css("display", "block");
-
- 			// invoke both computer and player moves.
- 			computer_move ();
- 			player_move ();
+ 			// make the board after this button is clicked.
+ 			make_board ();
 
  		});
 
@@ -188,86 +180,52 @@
 
  			$("h2").html("You are <span style='color: #4189C7;'>Blue</span>.");
 
- 			// show the board after this button is clicked.
- 			$(".row").css("display", "block");
-
- 			// invoke both computer and player moves.
- 			computer_move ();
- 			player_move ();
+ 			// make the board after this button is clicked.
+ 			make_board ();
 
  		});
 
  	}
 
 
+ 	// make board with 7 columns and 6 rows.
+ 	function make_board () {
 
+	 	for (var i = 0; i < 6; i++) {
 
+	 		for (var j = 0; j < 7; j++) {
 
- 	//==================== Ditched Code =====================//
+	 			// for each div that is getting appended, make the class "box", data-value "nothing".
+	 			var $circle = $("<div class = 'circle' data-name = 'nothing'></div>");
+	 			$circle.addClass("col-" + j);
+	 			$circle.addClass("row-" + i);
+	 			$(".row").append($circle);
+	 			$(".row").css("background-color", "#FFDF00");
 
- 	// // make an array of 9 divs.
- 	// function make_board () {
+	 		}
 
-	 // 	for (i = 0; i < 42; i++) {
+	 	}
 
-	 // 		// for each div that is getting appended, make the class "box", data-value "nothing",
-	 // 		// and put an empty p tag into the div.
-	 // 		$(".row").append("<div class = 'circle'" + "data-value = " + i + " data-name = 'nothing'></div>");
+	 	if (num_of_players === 2) {
 
-	 // 	}
+	 		two_players_move ();
 
-	 // 	// fix so that there are multiple arrays, each containing 7 divs. and that another array is holding onto all arrays
+	 	} else {
 
-	 // 	assign_class_names ();
+	 		computer_move ();
+	 		player_move ();
 
- 	// }
+	 	}
 
- 	// function assign_class_names () {
-
- 	// 	var $all_circles = $(".circle");
-
- 	// 	// for (k = 0; k < 7; k++) {
-
-	 // 	// 	for (i = 0; i < $all_circles.length; i ++) {
-
-	 // 	// 		if ($all_circles.eq(i*k).addClass("col-" + 0);
-
-	 // 	// 	}
-
-	 // 	// 	++j;
- 	// 	// 	console.log(j);
-
- 	// 	// }
- 	// 	// var step = 0;
-
- 	// 	// for (var i = 0; i < $all_circles.length; i++) {
-
-
-
- 	// 	// 	if ($all_circles.eq(i).attr("data-value") % 7 === 0) {
-
- 	// 	// 		//console.log($all_circles[i]);
- 	// 	// 		$all_circles.eq(i).addClass("col-" + step);
- 	// 	// 		step = step + 1;
- 	// 	// 		console.log(step);
-
- 	// 	// 	}
-
- 	// 	// }
-
- 	// }
-
-//==================== End of Ditched Code =====================//
-
-
-
+ 	}
 
 
 	// this function checks to see if the most bottom spot and then on, for 7 columns, is taken or not, and if not, drops your coin
 	// to the most bottom spot. This function is only invoked after a click.
- 	function check_spot (column_name, new_classname, mark) {
+ 	function check_spot (column_name, new_classname, mark) { // column_name is the column number of the spot the user(s) clicked.
+ 		// new classname is the class that the spot should take to add background color, mark is which player.
 
- 		for (i = 0; i < 7; i++) {
+ 		for (var i = 0; i < 7; i++) {
 
 	  		if (column_name === "col-" + i) {
 
@@ -277,7 +235,7 @@
 	 			// make an array with the above elements (also local).
 	 			var column_arr = jQuery.makeArray (column);
 
-	 			for (j = column_arr.length - 1; j > -1; j--) {
+	 			for (var j = column_arr.length - 1; j > -1; j--) {
 
 	 				if (column_arr[j].getAttribute("data-name") === "nothing"){
 
@@ -309,6 +267,8 @@
 
  		// for alternating turns. First player always goes first.
  		var this_player_clicked = 1;
+
+ 		var $all_circles = $(".circle");
 
  		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
  		$.each($all_circles, function (index, value) {
@@ -350,6 +310,7 @@
 
  	function player_move () {
 
+ 		var $all_circles = $(".circle");
  		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
  		$.each($all_circles, function (index, value) {
 
@@ -381,13 +342,13 @@
 
  	function computer_move () {
 
+ 		var $all_circles = $(".circle");
+
  		// computer needs to choose a number between 0 and 41 in order to place their mark on a random spot that is not already taken.
  		var computer_choice = Math.floor(Math.random() * 42);
 
 	  	if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
 
-	  		console.log("called inside computer move before making move");
-	  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
 	  		check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1],("circle-background-color-" + computer), "computer");
 
 	 		moves ++;
