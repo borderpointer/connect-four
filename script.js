@@ -1,21 +1,36 @@
  $(window).load(function () {
 
  	// player and computer vars need to be accessible from everywhere.
- 	var player_1 = "Player 1";
+ 	var player_1 = {
 
- 	var player_2 = "Player 2";
+ 		"mark_color" : "blue",
+
+ 		"data_name" : "Player 1"
+
+ 	};
+
+ 	var player_2 = {
+
+ 		"mark_color" : "red",
+
+ 		"data_name" : "Player 2"
+
+ 	};
 
  	var num_of_players = 0;
 
 
- 	var player = "Player";
+ 	var player = {
 
- 	var player_color;
+ 		"data_name" : "Player"
 
+ 	};
 
- 	var computer = "Computer";
+ 	var computer = {
 
- 	var comuter_color;
+ 		"data_name" : "Computer"
+
+ 	};
 
 
  	var winner = false; // this is used to stop the computer from making a move after there is a winner.
@@ -168,8 +183,8 @@
  			$("#chose-blue").remove();
  			$("#chose-red").remove();
 
- 			player_color = "red";
- 			computer_color = "blue";
+ 			player.mark_color = "red";
+ 			computer.mark_color = "blue";
 
  			$("h2").html("You are <span style='color: #C73D47;'>Red</span>.");
 
@@ -184,8 +199,8 @@
  			$("#chose-blue").remove();
  			$("#chose-red").remove();
 
- 			player_color = "blue";
- 			computer_color = "red";
+ 			player.mark_color = "blue";
+ 			computer.mark_color = "red";
 
  			$("h2").html("You are <span style='color: #4189C7;'>Blue</span>.");
 
@@ -290,23 +305,23 @@
 
 					if (this_player_clicked === 1) {
 
-						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-blue", player_1);
+						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-" + player_1.mark_color, player_1.data_name);
 						this_player_clicked = 2;
 
 			 			// later, if moves === 42, it will mean that there is a draw.
 						moves ++;
 
-						check_for_win (player_1);
+						check_for_win ($(this).attr("class").split(" ")[1], $(this).attr("class").split(" ")[2], player_1.data_name);
 
 					} else {
 
-						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-red", player_2);
+						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-" + player_2.mark_color, player_2.data_name);
 						this_player_clicked = 1;
 
 			 			// later, if moves === 42, it will mean that there is a draw.
 						moves ++;
 
-						check_for_win (player_2);
+						check_for_win ($(this).attr("class").split(" ")[1], $(this).attr("class").split(" ")[2], player_2.data_name);
 
 					}
 
@@ -330,12 +345,12 @@
 
 				if ($(this).attr("data-name") === "nothing") {
 
-					check_spot ($(this).attr("class").split(" ")[1], ("circle-background-color-" + player_color), player);
+					check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-" + player.mark_color, player.data_name);
 
 	 				// later, if moves === 42, it will mean that there is a draw.
 	 				moves ++;
 
-	 				check_for_win (player);
+	 				check_for_win ($(this).attr("class").split(" ")[1], $(this).attr("class").split(" ")[2], player.data_name);
 
 				 	if (!winner) {
 
@@ -360,16 +375,17 @@
 
  		var $all_circles = $(".circle");
 
+
  		// computer needs to choose a number between 0 and 41 in order to place their mark on a random spot that is not already taken.
  		var computer_choice = Math.floor(Math.random() * 42);
 
 	  	if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
 
-	  		check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1],("circle-background-color-" + computer_color), computer);
+	  		check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1], "circle-background-color-" + computer.mark_color, computer.data_name);
 
 	 		moves ++;
 
-	 		check_for_win (computer);
+	 		check_for_win ($all_circles.eq(computer_choice).attr("class").split(" ")[1], $all_circles.eq(computer_choice).attr("class").split(" ")[2], computer.data_name);
 
 		} else {
 
@@ -380,19 +396,12 @@
  	}
 
 
- 	function check_for_win (winning_mark) {
+ 	function check_for_win (column_name, row_name, winning_mark) {
 
- 		var $all_circles = $(".circle");
+ 		check_column (column_name, winning_mark);
+ 		check_row (row_name, winning_mark);
 
-	 	if (1 === 1) {
-
-	 		setTimeout(function () {
-
-	 			announce_winner (winning_mark);
-
-	 		}, 500);
-
-	 	} else if (moves === 42) {
+	 	if (moves === 42) {
 
 	 		$("#pick-color").fadeOut();
  			$(".row").fadeOut();
@@ -410,10 +419,92 @@
 
 	}
 
+
+	function check_column (column_name, winning_mark) {
+
+  		for (var i = 0; i < 7; i++) {
+
+	  		if (column_name === "col-" + i) {
+
+	  			// local var with all of the classes with "col-" + i
+	  			var column = document.getElementsByClassName("col-" + i);
+
+	 			// make an array with the above elements (also local).
+	 			var column_arr = jQuery.makeArray (column);
+
+	 			for (var j = column_arr.length - 1; j > -1; j--) {
+
+	 				if (column_arr[j].getAttribute("data-name") === winning_mark &&
+	 					column_arr[j-1].getAttribute("data-name") === winning_mark &&
+	 					column_arr[j-2].getAttribute("data-name") === winning_mark &&
+	 					column_arr[j-3].getAttribute("data-name") === winning_mark) {
+
+	 					setTimeout(function () {
+
+	 						announce_winner (winning_mark);
+
+	 					}, 500);
+
+	 					break;
+
+	 				}
+
+	 			}
+
+	 		}
+
+	 	}
+
+	}
+
+
+	function check_row (row_name, winning_mark) {
+
+		console.log("check row called");
+
+		var count = 0;
+
+  		for (var i = 0; i < 7; i++) {
+
+  			var count = 0;
+
+	  		if (row_name === "row-" + i) {
+
+	  			// local var with all of the classes with "col-" + i
+	  			var row = document.getElementsByClassName("row-" + i);
+
+	 			// make an array with the above elements (also local).
+	 			var row_arr = jQuery.makeArray (row);
+	 			for (var j = row_arr.length - 1; j >= 0; j--) {
+
+	 				if (row_arr[j-1].previousSibling.getAttribute("data-name") === winning_mark &&
+	 					row_arr[j].previousSibling.getAttribute("data-name") === winning_mark &&
+	 					row_arr[j].nextSibling.getAttribute("data-name") === winning_mark &&
+	 					row_arr[j+1].nextSibling.getAttribute("data-name") === winning_mark ) {
+
+	 					console.log("yes");
+
+	 					setTimeout(function () {
+
+	 						announce_winner (winning_mark);
+
+	 					}, 500);
+
+	 				}
+
+	 			}
+
+	 		}
+
+	 	}
+
+	}
+
+
 	// announce who won.
 	function announce_winner (winning_mark) {
 
-	 	if (winning_mark === player_1) {
+	 	if (winning_mark === player_1.data_name) {
 
 	 		winning_mark = $("#player-1").val();
 
@@ -429,7 +520,7 @@
 
  			winner = true;
 
- 		} else if (winning_mark === player_2) {
+ 		} else if (winning_mark === player_2.data_name) {
 
 	 		winning_mark = $("#player-2").val();
 
@@ -445,7 +536,7 @@
 
 	 		winner = true;
 
-	 	} else if (winning_mark === player) {
+	 	} else if (winning_mark === player.data_name) {
 
 	 		winning_mark = $("input").val();
 
