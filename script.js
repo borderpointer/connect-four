@@ -13,6 +13,51 @@
 
  	var moves = 0; // for checking if there is a draw.
 
+
+ 	// following columns and rows are needed for checking for win.
+
+	////// columns
+
+	var column_0 = document.getElementsByClassName("col-0");
+	var column_1 = document.getElementsByClassName("col-1");
+	var column_2 = document.getElementsByClassName("col-2");
+	var column_3 = document.getElementsByClassName("col-3");
+	var column_4 = document.getElementsByClassName("col-4");
+	var column_5 = document.getElementsByClassName("col-5");
+	var column_6 = document.getElementsByClassName("col-6");
+
+	/////// column arrays
+
+	var column_0_arr = jQuery.makeArray(column_0);
+	var column_1_arr = jQuery.makeArray(column_1);
+	var column_2_arr = jQuery.makeArray(column_2);
+	var column_3_arr = jQuery.makeArray(column_3);
+	var column_4_arr = jQuery.makeArray(column_4);
+	var column_5_arr = jQuery.makeArray(column_5);
+	var column_6_arr = jQuery.makeArray(column_6);
+
+	/////// rows
+
+	var row_0 = document.getElementsByClassName("row-0");
+	var row_1 = document.getElementsByClassName("row-1");
+	var row_2 = document.getElementsByClassName("row-2");
+	var row_3 = document.getElementsByClassName("row-3");
+	var row_4 = document.getElementsByClassName("row-4");
+	var row_5 = document.getElementsByClassName("row-5");
+
+	/////// row arrays
+
+	var row_0_arr = jQuery.makeArray(row_0);
+	var row_1_arr = jQuery.makeArray(row_1);
+	var row_2_arr = jQuery.makeArray(row_2);
+	var row_3_arr = jQuery.makeArray(row_3);
+	var row_4_arr = jQuery.makeArray(row_4);
+	var row_5_arr = jQuery.makeArray(row_5);
+
+	// grab all spots
+	var $all_circles = $(".circle");
+
+
  	// the user has to choose either to play with another person or with the computer.
  	function start_game () {
 
@@ -44,8 +89,8 @@
 
  		});
 
-
  	}
+
 
  	function two_players () {
 
@@ -84,6 +129,7 @@
  		});
 
  	}
+
 
  	function one_player () {
 
@@ -213,172 +259,41 @@
 
 
 
+
+
 	// this function checks to see if the most bottom spot and then on, for 7 columns, is taken or not, and if not, drops your coin
 	// to the most bottom spot. This function is only invoked after a click.
  	function check_spot (column_name, new_classname, mark) {
 
- 		if (column_name === "col-0") {
+ 		for (i = 0; i < 7; i++) {
 
- 			// grab all the elements with the class that is the same as the above.
- 			var column_0 = document.getElementsByClassName("col-0");
+	  		if (column_name === "col-" + i) {
 
- 			// make an array with all of the elements from above.
- 			var column_0_arr = jQuery.makeArray (column_0);
+	  			// local var with all of the classes with "col-" + i
+	  			var column = document.getElementsByClassName("col-" + i);
 
+	 			// make an array with the above elements (also local).
+	 			var column_arr = jQuery.makeArray (column);
 
- 			for (i = column_0_arr.length - 1; i > -1; i--) {
+	 			for (j = column_arr.length - 1; j > -1; j--) {
 
- 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
+	 				if (column_arr[j].getAttribute("data-name") === "nothing"){
 
- 					make_move (column_0_arr[i], new_classname, mark);
+	 					make_move (column_arr[j], new_classname, mark);
 
- 					break;
+	 					break;
 
- 				}
+	 				}
 
- 			}
+	 			}
 
- 		}
-
- 		if (column_name === "col-1") {
-
- 			// grab all the elements with the class that is the same as the above.
- 			var column_0 = document.getElementsByClassName("col-1");
-
- 			// make an array with all of the elements from above.
- 			var column_0_arr = jQuery.makeArray (column_0);
-
-
- 			for (i = column_0_arr.length - 1; i > -1; i--) {
-
- 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
-
- 					make_move (column_0_arr[i], new_classname, mark);
-
- 					break;
-
- 				}
-
- 			}
-
- 		}
-
- 		if (column_name === "col-2") {
-
- 			// grab all the elements with the class that is the same as the above.
- 			var column_0 = document.getElementsByClassName("col-2");
-
- 			// make an array with all of the elements from above.
- 			var column_0_arr = jQuery.makeArray (column_0);
-
-
- 			for (i = column_0_arr.length - 1; i > -1; i--) {
-
- 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
-
- 					make_move (column_0_arr[i], new_classname, mark);
-
- 					break;
-
- 				}
-
- 			}
-
- 		}
-
- 		if (column_name === "col-3") {
-
- 			// grab all the elements with the class that is the same as the above.
- 			var column_0 = document.getElementsByClassName("col-3");
-
- 			// make an array with all of the elements from above.
- 			var column_0_arr = jQuery.makeArray (column_0);
-
-
- 			for (i = column_0_arr.length - 1; i > -1; i--) {
-
- 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
-
- 					make_move (column_0_arr[i], new_classname, mark);
-
- 					break;
-
- 				}
-
- 			}
-
- 		}
-
- 		if (column_name === "col-4") {
-
- 			// grab all the elements with the class that is the same as the above.
- 			var column_0 = document.getElementsByClassName("col-4");
-
- 			// make an array with all of the elements from above.
- 			var column_0_arr = jQuery.makeArray (column_0);
-
-
- 			for (i = column_0_arr.length - 1; i > -1; i--) {
-
- 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
-
- 					make_move (column_0_arr[i], new_classname, mark);
-
- 					break;
-
- 				}
-
- 			}
-
- 		}
-
- 		if (column_name === "col-5") {
-
- 			// grab all the elements with the class that is the same as the above.
- 			var column_0 = document.getElementsByClassName("col-5");
-
- 			// make an array with all of the elements from above.
- 			var column_0_arr = jQuery.makeArray (column_0);
-
-
- 			for (i = column_0_arr.length - 1; i > -1; i--) {
-
- 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
-
- 					make_move (column_0_arr[i], new_classname, mark);
-
- 					break;
-
- 				}
-
- 			}
-
- 		}
-
- 		if (column_name === "col-6") {
-
- 			// grab all the elements with the class that is the same as the above.
- 			var column_0 = document.getElementsByClassName("col-6");
-
- 			// make an array with all of the elements from above.
- 			var column_0_arr = jQuery.makeArray (column_0);
-
-
- 			for (i = column_0_arr.length - 1; i > -1; i--) {
-
- 				if (column_0_arr[i].getAttribute("data-name") === "nothing"){
-
- 					make_move (column_0_arr[i], new_classname, mark);
-
- 					break;
-
- 				}
-
- 			}
+	 		}
 
  		}
 
  	}
+
+
  	// invoke this function when having a turn, for either player or computer.
  	function make_move (position, new_classname, mark) {
 
@@ -387,35 +302,10 @@
 
  	}
 
- 	function player_move () {
 
- 		var $all_circles = $(".circle");
+ 	function two_players_move () {
 
- 		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
- 		$.each($all_circles, function (index, value) {
-
-			$all_circles.eq(index).click(function () {
-
-				if ($(this).attr("data-name") === "nothing") {
-
-					check_spot ($(this).attr("class").split(" ")[1], ("circle-background-color-" + player), "player");
-
-	 				// later, if moves === 9, it will mean that there is a draw.
-	 				moves ++;
-
-	 			}
-
-	 		});
-
-	 	});
-
- 	}
-
- 	 function two_players_move () {
-
- 		var $all_circles = $(".circle");
-
- 		// for alternating turns.
+ 		// for alternating turns. First player always goes first.
  		var this_player_clicked = 1;
 
  		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
@@ -432,15 +322,20 @@
 						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-blue", "player-1");
 						this_player_clicked = 2;
 
+			 			// later, if moves === 42, it will mean that there is a draw.
+						moves ++;
+
 					} else {
 
 						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-red", "player-2");
 						this_player_clicked = 1;
 
+			 			// later, if moves === 42, it will mean that there is a draw.
+						moves ++;
+
 					}
 
-			 		// later, if moves === 9, it will mean that there is a draw.
-			 		moves ++;
+
 
 			 	}
 
@@ -450,44 +345,65 @@
 
  	}
 
- // 	function computer_move () {
 
- // 		console.log("called inside computer move");
+ 	function player_move () {
 
- // 		var $all_circles = $(".box");
+ 		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
+ 		$.each($all_circles, function (index, value) {
 
- // 		// computer needs to choose a number between 0 and 8 in order to place their mark on a random spot that is not already taken.
- // 		//var computer_choice = Math.floor(Math.random() * 42);
- // 		var computer_choice = 1;
+			$all_circles.eq(index).click(function () {
 
- //  		if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
+				if ($(this).attr("data-name") === "nothing") {
 
- //  			console.log("called inside computer move before making move");
- //  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
- //  			check_spot (("circle-background-color-" + computer), "computer");
- //  			player_move ();
+					check_spot ($(this).attr("class").split(" ")[1], ("circle-background-color-" + player), "player");
 
- // 			moves ++; // global var
+	 				// later, if moves === 42, it will mean that there is a draw.
+	 				moves ++;
 
+				 	if (!winner) {
 
- // 			// after making a move, check for win with the computer's mark as argument.
- // 			//check_for_win (computer);
+				 		setTimeout(function() {
+				 			computer_move ();
+				 		}, 1500);
 
- // 			// only invoke the player to make a move if there is no winner.
- // 			// if (!winner) {
+				 	}
 
-	// 			// player_move ();
+	 			}
 
-	//  		// }
+	 		});
 
-	// 		} else {
+	 	});
 
-	// 		//computer_move ();
-	// 	}
+ 	}
 
 
+ 	function computer_move () {
 
- // 	}
+ 		// computer needs to choose a number between 0 and 8 in order to place their mark on a random spot that is not already taken.
+ 		var computer_choice = Math.floor(Math.random() * 42);
+
+  		if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
+
+  			console.log("called inside computer move before making move");
+  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
+  			check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1],("circle-background-color-" + computer), "computer");
+
+ 			moves ++; // global var
+
+
+ 			// after making a move, check for win with the computer's mark as argument.
+ 			//check_for_win (computer);
+
+ 			// only invoke the player to make a move if there is no winner.
+ 			if (!winner) {
+
+				player_move ();
+
+	 		}
+
+		}
+
+ 	}
 
  // 	function check_for_win (winning_mark) {
 
@@ -516,7 +432,7 @@
 
 	//  			winner = true;
 
-	//  		} else if (moves === 9) {
+	//  		} else if (moves === 42) {
 
 	//  			$("h2").html("It's a Draw!");
 
