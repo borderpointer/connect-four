@@ -1,13 +1,22 @@
  $(window).load(function () {
 
  	// player and computer vars need to be accessible from everywhere.
- 	var player = "player";
+ 	var player_1 = "Player 1";
 
- 	var player_2 = "player 2";
+ 	var player_2 = "Player 2";
 
  	var num_of_players = 0;
 
- 	var computer = "computer";
+
+ 	var player = "Player";
+
+ 	var player_color;
+
+
+ 	var computer = "Computer";
+
+ 	var comuter_color;
+
 
  	var winner = false; // this is used to stop the computer from making a move after there is a winner.
 
@@ -159,8 +168,8 @@
  			$("#chose-blue").remove();
  			$("#chose-red").remove();
 
- 			player = "red";
- 			computer = "blue";
+ 			player_color = "red";
+ 			computer_color = "blue";
 
  			$("h2").html("You are <span style='color: #C73D47;'>Red</span>.");
 
@@ -175,8 +184,8 @@
  			$("#chose-blue").remove();
  			$("#chose-red").remove();
 
- 			player = "blue";
- 			computer = "red";
+ 			player_color = "blue";
+ 			computer_color = "red";
 
  			$("h2").html("You are <span style='color: #4189C7;'>Blue</span>.");
 
@@ -195,7 +204,7 @@
 
 	 		for (var j = 0; j < 7; j++) {
 
-	 			// for each div that is getting appended, make the class "box", data-value "nothing".
+	 			// make a board with 7 columns and 6 rows, and assign them with the corresponding column and row numbers.
 	 			var $circle = $("<div class = 'circle' data-name = 'nothing'></div>");
 	 			$circle.addClass("col-" + j);
 	 			$circle.addClass("row-" + i);
@@ -281,23 +290,25 @@
 
 					if (this_player_clicked === 1) {
 
-						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-blue", "player-1");
+						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-blue", player_1);
 						this_player_clicked = 2;
 
 			 			// later, if moves === 42, it will mean that there is a draw.
 						moves ++;
 
+						check_for_win (player_1);
+
 					} else {
 
-						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-red", "player-2");
+						check_spot ($(this).attr("class").split(" ")[1], "circle-background-color-red", player_2);
 						this_player_clicked = 1;
 
 			 			// later, if moves === 42, it will mean that there is a draw.
 						moves ++;
 
+						check_for_win (player_2);
+
 					}
-
-
 
 			 	}
 
@@ -311,6 +322,7 @@
  	function player_move () {
 
  		var $all_circles = $(".circle");
+
  		// for all of the boxes (divs) only make the ones that do not have children elements be able to be clicked.
  		$.each($all_circles, function (index, value) {
 
@@ -318,15 +330,19 @@
 
 				if ($(this).attr("data-name") === "nothing") {
 
-					check_spot ($(this).attr("class").split(" ")[1], ("circle-background-color-" + player), "player");
+					check_spot ($(this).attr("class").split(" ")[1], ("circle-background-color-" + player_color), player);
 
 	 				// later, if moves === 42, it will mean that there is a draw.
 	 				moves ++;
 
+	 				check_for_win (player);
+
 				 	if (!winner) {
 
 				 		setTimeout(function() {
+
 				 			computer_move ();
+
 				 		}, 1500);
 
 				 	}
@@ -349,15 +365,11 @@
 
 	  	if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
 
-	  		check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1],("circle-background-color-" + computer), "computer");
+	  		check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1],("circle-background-color-" + computer_color), computer);
 
 	 		moves ++;
 
-	 		made_move = true;
-
-
-	 		// after making a move, check for win with the computer's mark as argument.
-	 		//check_for_win (computer);
+	 		check_for_win (computer);
 
 		} else {
 
@@ -367,50 +379,109 @@
 
  	}
 
- // 	function check_for_win (winning_mark) {
 
- // 		var $all_circles = $(".box");
+ 	function check_for_win (winning_mark) {
 
-	//  	if (
+ 		var $all_circles = $(".circle");
 
-	//  		// there must be a better way of checking for a winner, but this works.
-	//  		( ( $all_circles.eq(0).data("value") === $all_circles.eq(3).data("value") ) && ( $all_circles.eq(0).data("value") === $all_circles.eq(6).data("value") ) && ( $all_circles.eq(0).data("value") === winning_mark) ) ||
-	//  		( ( $all_circles.eq(1).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(1).data("value") === $all_circles.eq(7).data("value") ) && ( $all_circles.eq(1).data("value") === winning_mark) ) ||
-	//  		( ( $all_circles.eq(2).data("value") === $all_circles.eq(5).data("value") ) && ( $all_circles.eq(2).data("value") === $all_circles.eq(8).data("value") ) && ( $all_circles.eq(2).data("value") === winning_mark) ) ||
-	//  		( ( $all_circles.eq(0).data("value") === $all_circles.eq(1).data("value") ) && ( $all_circles.eq(0).data("value") === $all_circles.eq(2).data("value") ) && ( $all_circles.eq(0).data("value") === winning_mark) ) ||
-	//  		( ( $all_circles.eq(3).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(3).data("value") === $all_circles.eq(5).data("value") ) && ( $all_circles.eq(3).data("value") === winning_mark) ) ||
-	//  		( ( $all_circles.eq(6).data("value") === $all_circles.eq(7).data("value") ) && ( $all_circles.eq(6).data("value") === $all_circles.eq(8).data("value") ) && ( $all_circles.eq(6).data("value") === winning_mark) ) ||
-	//  		( ( $all_circles.eq(0).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(0).data("value") === $all_circles.eq(8).data("value") ) && ( $all_circles.eq(0).data("value") === winning_mark) ) ||
-	//  		( ( $all_circles.eq(2).data("value") === $all_circles.eq(4).data("value") ) && ( $all_circles.eq(2).data("value") === $all_circles.eq(6).data("value") ) && ( $all_circles.eq(2).data("value") === winning_mark) )
+	 	if (1 === 1) {
 
-	//  		)
+	 		setTimeout(function () {
 
-	//  		{
+	 			announce_winner (winning_mark);
 
-	//  			$("h2").html(winning_mark + " Wins!");
+	 		}, 500);
 
-	//  			// invoke the play again function after there is a winner.
-	//  			play_again ();
+	 	} else if (moves === 42) {
 
-	//  			winner = true;
+	 		$("#pick-color").fadeOut();
+ 			$(".row").fadeOut();
 
-	//  		} else if (moves === 42) {
+	 		setTimeout(function () {
 
-	//  			$("h2").html("It's a Draw!");
+	 			$(".buttons-row").append("<h1 style='font-size: 6em; margin: 13vh 0 25px 0'>It's a Draw!</h1>");
 
-	//  			// invoke the play again function after there is a winner.
-	//  			play_again ();
+	 		// invoke the play again function after there is a winner.
+	 			play_again ();
 
-	//  		}
+	 		}, 1000);
 
-	// }
+ 		}
+
+	}
+
+	// announce who won.
+	function announce_winner (winning_mark) {
+
+	 	if (winning_mark === player_1) {
+
+	 		winning_mark = $("#player-1").val();
+
+ 			$("#pick-color").fadeOut();
+ 			$(".row").fadeOut();
+
+			setTimeout(function () {
+
+				$(".buttons-row").append("<h1 style='font-size: 6em; margin: 13vh 0 25px 0'>"+ winning_mark + " wins!</h1>").fadeIn();
+				play_again ();
+
+			}, 500);
+
+ 			winner = true;
+
+ 		} else if (winning_mark === player_2) {
+
+	 		winning_mark = $("#player-2").val();
+
+ 			$("#pick-color").fadeOut();
+ 			$(".row").fadeOut();
+
+			setTimeout(function () {
+
+		 		$(".buttons-row").append("<h1 style='font-size: 6em; margin: 13vh 0 25px 0'>"+ winning_mark + " wins!</h1>");
+		 		play_again ();
+
+		 	}, 500);
+
+	 		winner = true;
+
+	 	} else if (winning_mark === player) {
+
+	 		winning_mark = $("input").val();
+
+ 			$("#pick-color").fadeOut();
+ 			$(".row").fadeOut();
+
+			setTimeout(function () {
+
+		 		$(".buttons-row").append("<h1 style='font-size: 6em; margin: 13vh 0 25px 0'>"+ winning_mark + " wins!</h1>");
+		 		play_again ();
+
+		 	}, 500);
+
+	 		winner = true;
+
+	 	} else {
+
+ 			$("#pick-color").fadeOut();
+ 			$(".row").fadeOut();
+
+			setTimeout(function () {
+
+		 		$(".buttons-row").append("<h1 style='font-size: 6em; margin: 13vh 0 25px 0'>Computer wins!</h1>").fadeIn();
+		 		play_again ();
+
+		 	}, 500);
+
+	 		winner = true;
+
+	 	}
+
+	}
+
 
 	// create a reset button.
  	function play_again () {
-
- 		$("#pick-color").remove();
- 		$(".row").remove();
- 		$(".buttons-row").append("<h1 style='font-size: 6em; margin: 13vh 0 25px 0'>"+ $("#player-1").val() + " wins!</h1>");
 
  		setTimeout(function () {
 
@@ -423,7 +494,7 @@
 
  		});
 
- 		}, 1000);
+ 		}, 950);
 
  	}
 
