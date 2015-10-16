@@ -171,7 +171,8 @@
  			// show the board after this button is clicked.
  			$(".row").css("display", "block");
 
- 			// invoke function that caters to only one player.
+ 			// invoke both computer and player moves.
+ 			computer_move ();
  			player_move ();
 
  		});
@@ -190,7 +191,8 @@
  			// show the board after this button is clicked.
  			$(".row").css("display", "block");
 
- 			// invoke function that caters to only one player.
+ 			// invoke both computer and player moves.
+ 			computer_move ();
  			player_move ();
 
  		});
@@ -379,27 +381,26 @@
 
  	function computer_move () {
 
- 		// computer needs to choose a number between 0 and 8 in order to place their mark on a random spot that is not already taken.
+ 		// computer needs to choose a number between 0 and 41 in order to place their mark on a random spot that is not already taken.
  		var computer_choice = Math.floor(Math.random() * 42);
 
-  		if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
+	  	if ($all_circles.eq(computer_choice).attr("data-name") === "nothing") {
 
-  			console.log("called inside computer move before making move");
-  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
-  			check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1],("circle-background-color-" + computer), "computer");
+	  		console.log("called inside computer move before making move");
+	  			// only change the innerHTML value, add class, and change the data-value of the div if that div is empty.
+	  		check_spot ($all_circles.eq(computer_choice).attr("class").split(" ")[1],("circle-background-color-" + computer), "computer");
 
- 			moves ++; // global var
+	 		moves ++;
+
+	 		made_move = true;
 
 
- 			// after making a move, check for win with the computer's mark as argument.
- 			//check_for_win (computer);
+	 		// after making a move, check for win with the computer's mark as argument.
+	 		//check_for_win (computer);
 
- 			// only invoke the player to make a move if there is no winner.
- 			if (!winner) {
+		} else {
 
-				player_move ();
-
-	 		}
+			computer_move ();
 
 		}
 
@@ -443,30 +444,27 @@
 
 	// }
 
-	// // create a reset button.
- // 	function play_again () {
+	// create a reset button.
+ 	function play_again () {
 
- // 		if (player === "X") {
+ 		$("#pick-color").remove();
+ 		$(".row").remove();
+ 		$(".buttons-row").append("<h1 style='font-size: 6em; margin: 13vh 0 25px 0'>"+ $("#player-1").val() + " wins!</h1>");
 
- // 			$("#chose-blue").remove();
+ 		setTimeout(function () {
 
- // 		} else if (player === "O") {
+ 			$(".buttons-row").append("<button id = 'play-again'>Play Again?</button>");
 
- // 			$("#chose-red").remove();
+ 		 	// onclick, reload the window.
+ 			$("#play-again").click(function () {
+ 			console.log("clicked");
+ 			location.reload();
 
- // 		}
+ 		});
 
- // 		$(".buttons-row").append("<button id = 'play-again'>Play Again</button>");
+ 		}, 1000);
 
-
- // 		// onclick, reload the window.
- // 		$("#play-again").click(function () {
-
- // 			location.reload();
-
- // 		});
-
- // 	}
+ 	}
 
  	// this is where it all begins.
  	start_game ();
