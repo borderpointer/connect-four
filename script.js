@@ -5,78 +5,88 @@
 
  		"mark_color" : "blue",
 
- 		"data_name" : "Player 1"
+ 		"data_name" : "Player 1",
+
+ 		"wins" : 0
 
  	};
+
+ 	var player_1_moves = [];
+
 
  	var player_2 = {
 
  		"mark_color" : "red",
 
- 		"data_name" : "Player 2"
+ 		"data_name" : "Player 2",
+
+ 		"wins" : 0
 
  	};
+
+ 	var player_2_moves = [];
 
  	var num_of_players = 0;
 
 
  	var player = {
 
- 		"data_name" : "Player"
+ 		"data_name" : "Player",
+
+ 		"wins" : 0
 
  	};
+
+ 	var player_moves = [];
 
  	var computer = {
 
- 		"data_name" : "Computer"
+ 		"data_name" : "Computer",
+
+ 		"wins" : 0
 
  	};
+
+ 	var computer_moves = [];
 
 
  	var winner = false; // this is used to stop the computer from making a move after there is a winner.
 
  	var moves = 0; // for checking if there is a draw.
 
+ 	var diagonal_win = [
 
- 	// following columns and rows are needed for checking for win.
+ 		[14, 22, 30, 38],
+ 		[7, 15, 23, 31],
+ 		[15, 23, 31, 39],
+ 		[0, 8, 16, 24],
+ 		[8, 16, 24, 32],
+ 		[16, 24, 32, 40],
+ 		[1, 9, 17, 25],
+ 		[9, 17, 25, 33],
+ 		[17, 25, 33, 41],
+ 		[2, 10, 18, 26],
+ 		[10, 18, 26, 34],
+ 		[3, 11, 19, 27]
+ 		[3, 9, 15, 21],
+ 		[4, 10, 16, 22],
+ 		[10, 16, 22, 28],
+ 		[5, 11, 17, 23],
+ 		[11, 17, 23, 29],
+ 		[17, 23, 29, 35],
+ 		[6, 12, 18, 24],
+ 		[12, 18, 24, 30],
+ 		[18, 24, 30, 36],
+ 		[13, 19, 25, 31],
+ 		[19, 25, 31, 37],
+ 		[20, 26, 32, 38],
 
-	////// columns
+ 	];
 
-	var column_0 = document.getElementsByClassName("col-0");
-	var column_1 = document.getElementsByClassName("col-1");
-	var column_2 = document.getElementsByClassName("col-2");
-	var column_3 = document.getElementsByClassName("col-3");
-	var column_4 = document.getElementsByClassName("col-4");
-	var column_5 = document.getElementsByClassName("col-5");
-	var column_6 = document.getElementsByClassName("col-6");
-
-	/////// column arrays
-
-	var column_0_arr = jQuery.makeArray(column_0);
-	var column_1_arr = jQuery.makeArray(column_1);
-	var column_2_arr = jQuery.makeArray(column_2);
-	var column_3_arr = jQuery.makeArray(column_3);
-	var column_4_arr = jQuery.makeArray(column_4);
-	var column_5_arr = jQuery.makeArray(column_5);
-	var column_6_arr = jQuery.makeArray(column_6);
-
-	/////// rows
-
-	var row_0 = document.getElementsByClassName("row-0");
-	var row_1 = document.getElementsByClassName("row-1");
-	var row_2 = document.getElementsByClassName("row-2");
-	var row_3 = document.getElementsByClassName("row-3");
-	var row_4 = document.getElementsByClassName("row-4");
-	var row_5 = document.getElementsByClassName("row-5");
-
-	/////// row arrays
-
-	var row_0_arr = jQuery.makeArray(row_0);
-	var row_1_arr = jQuery.makeArray(row_1);
-	var row_2_arr = jQuery.makeArray(row_2);
-	var row_3_arr = jQuery.makeArray(row_3);
-	var row_4_arr = jQuery.makeArray(row_4);
-	var row_5_arr = jQuery.makeArray(row_5);
+	console.log(localStorage.getItem("player_1_score"));
+	console.log(localStorage.getItem("player_2_score"));
+	console.log(localStorage.getItem("player_score"));
+	console.log(localStorage.getItem("computer_score"));
 
 
  	// the user has to choose either to play with another person or with the computer.
@@ -230,6 +240,15 @@
 
 	 	}
 
+	 	// give data-value (0-41) to all circles
+	 	var $circles = $(".circle");
+
+	 	for (var i = 0; i < $circles.length; i++) {
+
+	 		$circles.eq(i).attr("data-value", i);
+
+	 	}
+
 	 	if (num_of_players === 2) {
 
 	 		two_players_move ();
@@ -281,8 +300,35 @@
  	// invoke this function when having a turn, for either player or computer.
  	function make_move (position, new_classname, mark) {
 
- 		$(position).addClass(new_classname);
- 		$(position).attr("data-name", mark);
+	 	if (mark === player_1.data_name) {
+
+	 		player_1_moves.push(parseInt($(position).attr("data-value")));
+
+  			$(position).addClass(new_classname);
+ 			$(position).attr("data-name", mark);
+
+ 		} else if (mark === player_2.data_name) {
+
+	 		player_2_moves.push(parseInt($(position).attr("data-value")));
+
+  			$(position).addClass(new_classname);
+ 			$(position).attr("data-name", mark);
+
+ 		} else if (mark === player.data_name) {
+
+	 		player_moves.push(parseInt($(position).attr("data-value")));
+
+  			$(position).addClass(new_classname);
+ 			$(position).attr("data-name", mark);
+
+ 		} else if (mark === computer.data_name) {
+
+	 		computer_moves.push(parseInt($(position).attr("data-value")));
+
+  			$(position).addClass(new_classname);
+ 			$(position).attr("data-name", mark);
+
+ 		}
 
  	}
 
@@ -311,7 +357,7 @@
 			 			// later, if moves === 42, it will mean that there is a draw.
 						moves ++;
 
-						check_for_win ($(this).attr("class").split(" ")[1], $(this).attr("class").split(" ")[2], player_1.data_name);
+						check_for_win ($(this).attr("class").split(" ")[1], player_1.data_name);
 
 					} else {
 
@@ -321,7 +367,7 @@
 			 			// later, if moves === 42, it will mean that there is a draw.
 						moves ++;
 
-						check_for_win ($(this).attr("class").split(" ")[1], $(this).attr("class").split(" ")[2], player_2.data_name);
+						check_for_win ($(this).attr("class").split(" ")[1], player_2.data_name);
 
 					}
 
@@ -350,7 +396,7 @@
 	 				// later, if moves === 42, it will mean that there is a draw.
 	 				moves ++;
 
-	 				check_for_win ($(this).attr("class").split(" ")[1], $(this).attr("class").split(" ")[2], player.data_name);
+	 				check_for_win ($(this).attr("class").split(" ")[1], player.data_name);
 
 				 	if (!winner) {
 
@@ -385,7 +431,7 @@
 
 	 		moves ++;
 
-	 		check_for_win ($all_circles.eq(computer_choice).attr("class").split(" ")[1], $all_circles.eq(computer_choice).attr("class").split(" ")[2], computer.data_name);
+	 		check_for_win ($all_circles.eq(computer_choice).attr("class").split(" ")[1], computer.data_name);
 
 		} else {
 
@@ -396,10 +442,11 @@
  	}
 
 
- 	function check_for_win (column_name, row_name, winning_mark) {
+ 	function check_for_win (column_name, winning_mark) {
 
  		check_column (column_name, winning_mark);
- 		check_row (row_name, winning_mark);
+ 		check_row (winning_mark);
+ 		check_diagonal (winning_mark);
 
 	 	if (moves === 42) {
 
@@ -458,48 +505,272 @@
 	}
 
 
-	function check_row (row_name, winning_mark) {
+	function check_row (winning_mark) {
 
-		console.log("check row called");
+	 	if (winning_mark === player_1.data_name) {
 
-		var count = 0;
+	 		player_1_moves.sort();
+	 		console.log(player_1_moves);
 
-  		for (var i = 0; i < 7; i++) {
+  			for (var i = 0; i < player_1_moves.length - 2; i++) {
 
-  			var count = 0;
+  				var first_match = player_1_moves[i]; //14
+  				var second_match = player_1_moves[i+1]; //22
+  				var third_match = player_1_moves[i+2]; //30
+  				var fourth_match = player_1_moves[i+3]; //38
 
-	  		if (row_name === "row-" + i) {
+  				if (
 
-	  			// local var with all of the classes with "col-" + i
-	  			var row = document.getElementsByClassName("row-" + i);
+  					second_match === (first_match + 1) &&
+  					third_match === (second_match + 1) &&
+  					fourth_match === (third_match + 1) ) {
 
-	 			// make an array with the above elements (also local).
-	 			var row_arr = jQuery.makeArray (row);
-	 			for (var j = row_arr.length - 1; j >= 0; j--) {
+  					setTimeout(function () {
 
-	 				if (row_arr[j-1].previousSibling.getAttribute("data-name") === winning_mark &&
-	 					row_arr[j].previousSibling.getAttribute("data-name") === winning_mark &&
-	 					row_arr[j].nextSibling.getAttribute("data-name") === winning_mark &&
-	 					row_arr[j+1].nextSibling.getAttribute("data-name") === winning_mark ) {
+	 					announce_winner (winning_mark);
 
-	 					console.log("yes");
+	 				}, 500);
 
-	 					setTimeout(function () {
+  				}
 
-	 						announce_winner (winning_mark);
+  			}
 
-	 					}, 500);
+ 		} else if (winning_mark === player_2.data_name) {
 
-	 				}
+	 		player_2_moves.sort();
+	 		console.log(player_2_moves);
+
+  			for (var i = 0; i < player_2_moves.length - 2; i++) {
+
+  				var first_match = player_2_moves[i]; //14
+  				var second_match = player_2_moves[i+1]; //22
+  				var third_match = player_2_moves[i+2]; //30
+  				var fourth_match = player_2_moves[i+3]; //38
+
+  				if (
+
+  					second_match === (first_match + 1) &&
+  					third_match === (second_match + 1) &&
+  					fourth_match === (third_match + 1) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				}
+
+  			}
+
+ 		} else if (winning_mark === player.data_name) {
+
+	 		player_moves.sort();
+	 		console.log(player_moves);
+
+  			for (var i = 0; i < player_moves.length - 2; i++) {
+
+  				var first_match = player_moves[i]; //14
+  				var second_match = player_moves[i+1]; //22
+  				var third_match = player_moves[i+2]; //30
+  				var fourth_match = player_moves[i+3]; //38
+
+  				if (
+
+  					second_match === (first_match + 1) &&
+  					third_match === (second_match + 1) &&
+  					fourth_match === (third_match + 1) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				}
+
+  			}
+
+ 		} else if (winning_mark === computer.data_name) {
+
+	 		computer_moves.sort();
+	 		console.log(player_moves);
+
+  			for (var i = 0; i < player_moves.length - 2; i++) {
+
+  				var first_match = computer_moves[i]; //14
+  				var second_match = computer_moves[i+1]; //22
+  				var third_match = computer_moves[i+2]; //30
+  				var fourth_match = computer_moves[i+3]; //38
+
+  				if (
+
+  					second_match === (first_match + 1) &&
+  					third_match === (second_match + 1) &&
+  					fourth_match === (third_match + 1) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				}
+
+  			}
+
+ 		}
+
+	}
+
+	function check_diagonal (winning_mark) {
+
+		console.log(winning_mark);
+
+	 	if (winning_mark === player_1.data_name) {
+
+	 		player_1_moves.sort();
+
+	 		for (var i = 0; i < diagonal_win.length; i++){
+
+	 			if (jQuery.inArray(diagonal_win[i][0], player_1_moves) &&
+	 				jQuery.inArray(diagonal_win[i][1], player_1_moves) &&
+	 				jQuery.inArray(diagonal_win[i][2], player_1_moves) &&
+	 				jQuery.inArray(diagonal_win[i][4], player_1_moves)) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
 
 	 			}
 
 	 		}
 
-	 	}
+	 	} else if (winning_mark === player_2.data_name) {
+
+	 		player_2_moves.sort();
+
+  			for (var i = 0; i < player_2_moves.length - 2; i++) {
+
+  				var first_match = player_2_moves[i]; //14
+  				var second_match = player_2_moves[i+1]; //22
+  				var third_match = player_2_moves[i+2]; //30
+  				var fourth_match = player_2_moves[i+3]; //38
+
+  				if (
+
+  					second_match === (first_match + 8) &&
+  					third_match === (second_match + 8) &&
+  					fourth_match === (third_match + 8) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				} else if (
+
+  					second_match === (first_match + 6) &&
+  					third_match === (second_match + 6) &&
+  					fourth_match === (third_match + 6) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				}
+
+  			}
+
+ 		} else if (winning_mark === player.data_name) {
+
+	 		player_moves.sort();
+
+	 		console.log(player_moves);
+
+  			for (var i = 0; i < player_moves.length - 2; i++) {
+
+  				var first_match = player_moves[i]; //14
+  				var second_match = player_moves[i+1]; //22
+  				var third_match = player_moves[i+2]; //30
+  				var fourth_match = player_moves[i+3]; //38
+
+  				if (
+
+  					second_match === (first_match + 8) &&
+  					third_match === (second_match + 8) &&
+  					fourth_match === (third_match + 8) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				} else if (
+
+  					second_match === (first_match + 6) &&
+  					third_match === (second_match + 6) &&
+  					fourth_match === (third_match + 6) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				}
+
+  			}
+
+ 		} else if (winning_mark === computer.data_name) {
+
+	 		computer_moves.sort();
+	 		console.log(computer_moves);
+
+  			for (var i = 0; i < player_moves.length - 2; i++) {
+
+  				var first_match = computer_moves[i]; //14
+  				var second_match = computer_moves[i+1]; //22
+  				var third_match = computer_moves[i+2]; //30
+  				var fourth_match = computer_moves[i+3]; //38
+
+  				if (
+
+  					second_match === (first_match + 8) &&
+  					third_match === (second_match + 8) &&
+  					fourth_match === (third_match + 8) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				} else if (
+
+  					second_match === (first_match + 6) &&
+  					third_match === (second_match + 6) &&
+  					fourth_match === (third_match + 6) ) {
+
+  					setTimeout(function () {
+
+	 					announce_winner (winning_mark);
+
+	 				}, 500);
+
+  				}
+
+  			}
+
+ 		}
 
 	}
-
 
 	// announce who won.
 	function announce_winner (winning_mark) {
@@ -520,6 +791,8 @@
 
  			winner = true;
 
+ 			player_1.wins++;
+
  		} else if (winning_mark === player_2.data_name) {
 
 	 		winning_mark = $("#player-2").val();
@@ -535,6 +808,8 @@
 		 	}, 500);
 
 	 		winner = true;
+
+	 		player_2.wins++;
 
 	 	} else if (winning_mark === player.data_name) {
 
@@ -552,6 +827,8 @@
 
 	 		winner = true;
 
+	 		player.wins++;
+
 	 	} else {
 
  			$("#pick-color").fadeOut();
@@ -565,6 +842,8 @@
 		 	}, 500);
 
 	 		winner = true;
+
+	 		computer.wins++;
 
 	 	}
 
@@ -587,6 +866,18 @@
 
  		}, 950);
 
+ 		var player_1_score = player_1.wins;
+ 		localStorage.setItem("player_1_score", player_1_score);
+
+ 		 var player_2_score = player_2.wins;
+ 		localStorage.setItem("player_2_score", player_2_score);
+
+ 		var player_score = player.wins;
+ 		localStorage.setItem("player_score", player_score);
+
+ 		var computer_score = computer.wins;
+ 		localStorage.setItem("computer_score", computer_score);
+
  	}
 
  	// this is where it all begins.
@@ -594,3 +885,33 @@
 
 
  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ /* Notes : stuff to think about
+
+ 	1) Alternate solution for diagonal check would be to:
+ 		a. add ids to each circle
+ 		b. capture index of every player's move
+ 		c. iterate through player move array and check for mathematical pattern (+8 for top left to bottom right, +6 for top right to bottom left)
+
+	--capture all player's move in player array
+	sort the array in ascending order
+	loop entire array, find four consecutive mathematically patterned combination of 4.
+	make two functions that will check every 8, every 6.
+
+	inside first loop
+
+ */
