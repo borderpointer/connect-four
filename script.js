@@ -1,99 +1,19 @@
+ /*
+ this script runs all functions that set up the game before the player(s) start playing, such as:
+
+ • ask if the user wants to play with another person or with the computer.
+ • for two players, ask both their names and assign them automatic colors (player 1 is always blue, player 2 is always red).
+ • for one player, ask their name and ask if they want to be blue and red, and then assign the colors accordingly
+   (if player chooses blue, the computer automatically gets assigned blue, and vice versa).
+ */
+
  $(window).load(function () {
-
- 	// player and computer vars need to be accessible from everywhere.
- 	var player_1 = {
-
- 		"mark_color" : "blue",
-
- 		"data_name" : "Player 1",
-
- 		"wins" : 0
-
- 	};
-
- 	var player_1_moves = [];
-
-
- 	var player_2 = {
-
- 		"mark_color" : "red",
-
- 		"data_name" : "Player 2",
-
- 		"wins" : 0
-
- 	};
-
- 	var player_2_moves = [];
-
- 	var num_of_players = 0;
-
-
- 	var player = {
-
- 		"data_name" : "Player",
-
- 		"wins" : 0
-
- 	};
-
- 	var player_moves = [];
-
- 	var computer = {
-
- 		"data_name" : "Computer",
-
- 		"wins" : 0
-
- 	};
-
- 	var computer_moves = [];
-
-
- 	var winner = false; // this is used to stop the computer from making a move after there is a winner.
-
- 	var moves = 0; // for checking if there is a draw.
-
- 	var diagonal_win = [
-
- 		[14, 22, 30, 38],
- 		[7, 15, 23, 31],
- 		[15, 23, 31, 39],
- 		[0, 8, 16, 24],
- 		[8, 16, 24, 32],
- 		[16, 24, 32, 40],
- 		[1, 9, 17, 25],
- 		[9, 17, 25, 33],
- 		[17, 25, 33, 41],
- 		[2, 10, 18, 26],
- 		[10, 18, 26, 34],
- 		[3, 11, 19, 27]
- 		[3, 9, 15, 21],
- 		[4, 10, 16, 22],
- 		[10, 16, 22, 28],
- 		[5, 11, 17, 23],
- 		[11, 17, 23, 29],
- 		[17, 23, 29, 35],
- 		[6, 12, 18, 24],
- 		[12, 18, 24, 30],
- 		[18, 24, 30, 36],
- 		[13, 19, 25, 31],
- 		[19, 25, 31, 37],
- 		[20, 26, 32, 38],
-
- 	];
-
-	console.log(localStorage.getItem("player_1_score"));
-	console.log(localStorage.getItem("player_2_score"));
-	console.log(localStorage.getItem("player_score"));
-	console.log(localStorage.getItem("computer_score"));
-
 
  	// the user has to choose either to play with another person or with the computer.
  	function start_game () {
 
- 		var $button_two_players = $("#chose-two-players");
- 		var $button_one_player = $("#chose-one-player");
+ 		var $button_two_players = $("#two-players-btn");
+ 		var $button_one_player = $("#one-player-btn");
 
   		$button_two_players.click(function () {
 
@@ -150,6 +70,8 @@
 	 		$("#pick-color").css("display", "block");
 	 		$("#pick-color").css("margin", "25px 0");
 
+
+	 		// update the number of players to 2 so that the two_players_move function is called.
 	 		num_of_players = 2;
 
 	 		// for two players, don't ask which colors they want to be, just assign them. So the make_board gets invoked automatically
@@ -182,16 +104,16 @@
 	 		$("#pick-color").css("margin", "25px 0");
 
 	 		// previously, the two buttons' display is "none", so change that to show.
-	 		$("#chose-red").css("display", "initial");
-	 		$("#chose-blue").css("display", "initial");
+	 		$("#red-btn").css("display", "initial");
+	 		$("#blue-btn").css("display", "initial");
 
  		});
 
  		// if the player chooses to be Red.
- 		$("#chose-red").click(function () {
+ 		$("#red-btn").click(function () {
 
- 			$("#chose-blue").remove();
- 			$("#chose-red").remove();
+ 			$("#blue-btn").remove();
+ 			$("#red-btn").remove();
 
  			player.mark_color = "red";
  			computer.mark_color = "blue";
@@ -204,10 +126,10 @@
  		});
 
  		// if the player chooses to be Blue.
- 		$("#chose-blue").click(function () {
+ 		$("#blue-btn").click(function () {
 
- 			$("#chose-blue").remove();
- 			$("#chose-red").remove();
+ 			$("#blue-btn").remove();
+ 			$("#red-btn").remove();
 
  			player.mark_color = "blue";
  			computer.mark_color = "red";
@@ -510,7 +432,6 @@
 	 	if (winning_mark === player_1.data_name) {
 
 	 		player_1_moves.sort();
-	 		console.log(player_1_moves);
 
   			for (var i = 0; i < player_1_moves.length - 2; i++) {
 
@@ -538,7 +459,6 @@
  		} else if (winning_mark === player_2.data_name) {
 
 	 		player_2_moves.sort();
-	 		console.log(player_2_moves);
 
   			for (var i = 0; i < player_2_moves.length - 2; i++) {
 
@@ -566,7 +486,6 @@
  		} else if (winning_mark === player.data_name) {
 
 	 		player_moves.sort();
-	 		console.log(player_moves);
 
   			for (var i = 0; i < player_moves.length - 2; i++) {
 
@@ -594,7 +513,6 @@
  		} else if (winning_mark === computer.data_name) {
 
 	 		computer_moves.sort();
-	 		console.log(player_moves);
 
   			for (var i = 0; i < player_moves.length - 2; i++) {
 
@@ -625,150 +543,33 @@
 
 	function check_diagonal (winning_mark) {
 
-		console.log(winning_mark);
+  		for (var i = 0; i < diagonal_win.length; i++) {
 
-	 	if (winning_mark === player_1.data_name) {
+  			for (var j = 0; j < diagonal_win[i].length; j++) {
 
-	 		player_1_moves.sort();
-
-	 		for (var i = 0; i < diagonal_win.length; i++){
-
-	 			if (jQuery.inArray(diagonal_win[i][0], player_1_moves) &&
-	 				jQuery.inArray(diagonal_win[i][1], player_1_moves) &&
-	 				jQuery.inArray(diagonal_win[i][2], player_1_moves) &&
-	 				jQuery.inArray(diagonal_win[i][4], player_1_moves)) {
-
-  					setTimeout(function () {
-
-	 					announce_winner (winning_mark);
-
-	 				}, 500);
-
-	 			}
-
-	 		}
-
-	 	} else if (winning_mark === player_2.data_name) {
-
-	 		player_2_moves.sort();
-
-  			for (var i = 0; i < player_2_moves.length - 2; i++) {
-
-  				var first_match = player_2_moves[i]; //14
-  				var second_match = player_2_moves[i+1]; //22
-  				var third_match = player_2_moves[i+2]; //30
-  				var fourth_match = player_2_moves[i+3]; //38
+  				var $check_1 = $("div[data-value='" + diagonal_win[i][j] + "']");
+  				var $check_2 = $("div[data-value='" + diagonal_win[i][j+1] + "']");
+  				var $check_3 = $("div[data-value='" + diagonal_win[i][j+2] + "']");
+  				var $check_4 = $("div[data-value='" + diagonal_win[i][j+3] + "']");
 
   				if (
+  					$check_1.attr("data-name") === winning_mark &&
+  					$check_2.attr("data-name") === winning_mark &&
+  					$check_3.attr("data-name") === winning_mark &&
+  					$check_4.attr("data-name") === winning_mark
+  					) {
 
-  					second_match === (first_match + 8) &&
-  					third_match === (second_match + 8) &&
-  					fourth_match === (third_match + 8) ) {
+		  			setTimeout(function () {
 
-  					setTimeout(function () {
+			 			announce_winner (winning_mark);
 
-	 					announce_winner (winning_mark);
-
-	 				}, 500);
-
-  				} else if (
-
-  					second_match === (first_match + 6) &&
-  					third_match === (second_match + 6) &&
-  					fourth_match === (third_match + 6) ) {
-
-  					setTimeout(function () {
-
-	 					announce_winner (winning_mark);
-
-	 				}, 500);
+			 		}, 500);
 
   				}
 
   			}
 
- 		} else if (winning_mark === player.data_name) {
-
-	 		player_moves.sort();
-
-	 		console.log(player_moves);
-
-  			for (var i = 0; i < player_moves.length - 2; i++) {
-
-  				var first_match = player_moves[i]; //14
-  				var second_match = player_moves[i+1]; //22
-  				var third_match = player_moves[i+2]; //30
-  				var fourth_match = player_moves[i+3]; //38
-
-  				if (
-
-  					second_match === (first_match + 8) &&
-  					third_match === (second_match + 8) &&
-  					fourth_match === (third_match + 8) ) {
-
-  					setTimeout(function () {
-
-	 					announce_winner (winning_mark);
-
-	 				}, 500);
-
-  				} else if (
-
-  					second_match === (first_match + 6) &&
-  					third_match === (second_match + 6) &&
-  					fourth_match === (third_match + 6) ) {
-
-  					setTimeout(function () {
-
-	 					announce_winner (winning_mark);
-
-	 				}, 500);
-
-  				}
-
-  			}
-
- 		} else if (winning_mark === computer.data_name) {
-
-	 		computer_moves.sort();
-	 		console.log(computer_moves);
-
-  			for (var i = 0; i < player_moves.length - 2; i++) {
-
-  				var first_match = computer_moves[i]; //14
-  				var second_match = computer_moves[i+1]; //22
-  				var third_match = computer_moves[i+2]; //30
-  				var fourth_match = computer_moves[i+3]; //38
-
-  				if (
-
-  					second_match === (first_match + 8) &&
-  					third_match === (second_match + 8) &&
-  					fourth_match === (third_match + 8) ) {
-
-  					setTimeout(function () {
-
-	 					announce_winner (winning_mark);
-
-	 				}, 500);
-
-  				} else if (
-
-  					second_match === (first_match + 6) &&
-  					third_match === (second_match + 6) &&
-  					fourth_match === (third_match + 6) ) {
-
-  					setTimeout(function () {
-
-	 					announce_winner (winning_mark);
-
-	 				}, 500);
-
-  				}
-
-  			}
-
- 		}
+  		}
 
 	}
 
