@@ -30,5 +30,5 @@ Demo of this game can be found here: borderpointer.github.io/connect-four
 
 • Make the AI smarter so that it actively blocks the player from winning. <br>
 • Keep track and display each player's wins. <br>
-• Add the ability to store a game to play later, using Firebase or similar. <br>
+• Add the ability to store a game to play later, using Firebase, local storage, or similar. <br>
 • Add the ability to play live with another person remotely, using Firebase or similar.
