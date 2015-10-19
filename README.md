@@ -20,13 +20,13 @@ Demo of this game can be found here: borderpointer.github.io/connect-four
 
 ## Unsolved Problems
 
-##### There are some isolated use cases where a win won't be detected when there is a win, such as:
+#### There are some isolated use cases that cause:
 
-• When there are five consecutively same colored chips, instead of four.
+• A win to be not detected when there are five consecutively same colored chips, instead of four.
 
 ## Future Improvements
 
-##### I want to:
+#### I want to:
 
 • Make the AI smarter so that it actively blocks the player from winning. <br>
 • Keep track and display each player's wins. <br>
