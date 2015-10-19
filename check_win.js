@@ -213,28 +213,24 @@ function check_diagonal (winning_mark) {
 
 	for (var i = 0; i < diagonal_win.length; i++) {
 
-		for (var j = 0; j < diagonal_win[i].length; j++) {
+		// data-value is assigned to each circle (div) and goes from 0 to 41.
+		var $check_1 = $("div[data-value='" + diagonal_win[i][0] + "']");
+		var $check_2 = $("div[data-value='" + diagonal_win[i][1] + "']");
+		var $check_3 = $("div[data-value='" + diagonal_win[i][2] + "']");
+		var $check_4 = $("div[data-value='" + diagonal_win[i][3] + "']");
 
-			// data-value is assigned to each circle (div) and goes from 0 to 41.
-			var $check_1 = $("div[data-value='" + diagonal_win[i][j] + "']");
-			var $check_2 = $("div[data-value='" + diagonal_win[i][j+1] + "']");
-			var $check_3 = $("div[data-value='" + diagonal_win[i][j+2] + "']");
-			var $check_4 = $("div[data-value='" + diagonal_win[i][j+3] + "']");
+		if (
+			$check_1.attr("data-name") === winning_mark &&
+			$check_2.attr("data-name") === winning_mark &&
+			$check_3.attr("data-name") === winning_mark &&
+			$check_4.attr("data-name") === winning_mark
+			) {
 
-			if (
-				$check_1.attr("data-name") === winning_mark &&
-				$check_2.attr("data-name") === winning_mark &&
-				$check_3.attr("data-name") === winning_mark &&
-				$check_4.attr("data-name") === winning_mark
-				) {
+			setTimeout(function () {
 
-  			setTimeout(function () {
+				announce_winner (winning_mark);
 
-	 			announce_winner (winning_mark);
-
-	 		}, 500);
-
-			}
+			}, 500);
 
 		}
 
