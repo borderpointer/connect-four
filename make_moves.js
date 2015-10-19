@@ -201,6 +201,8 @@ function computer_move () {
 		// check for win after every turn.
 		check_for_win ($all_circles.eq(computer_choice).attr("class").split(" ")[1], computer.data_name);
 
+		break;
+
 	// keep running computer_move until the computer finds a spot that is empty.
 	} else {
 
