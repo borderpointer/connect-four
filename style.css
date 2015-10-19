@@ -52,7 +52,7 @@ button:focus {
 	margin-left: 10px;
 }
 
-#chose-red, #chose-blue {
+#red-btn, #blue-btn {
 	display: none;
 }
 
