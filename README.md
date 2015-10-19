@@ -16,7 +16,7 @@ This game was built to practice HTML, CSS, and JS, and to improve problem solvin
 
 ## Installation
 
-Demo of this game can be found <a href="http://borderpointer.github.io/connect-four/">here</a>.
+Demo of this game can be found <a href="http://borderpointer.github.io/connect-four/" target = "_blank">here</a>.
 
 ## Unsolved Problems
 
